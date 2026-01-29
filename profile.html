@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Account | BOOKStore</title>
+  <link rel="icon" type="image/png" href="book.png">
+  
+  <!-- Fonts: Inter & Poppins -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <!-- Google Icons -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+
+  <style>
+    /* --- 1. VARIABLES & RESET --- */
+    :root {
+      --bg-dark: #050505;
+      --bg-card: #121212;
+      --bg-glass: rgba(18, 18, 18, 0.75);
+      --border-color: rgba(255, 255, 255, 0.1);
+      
+      --primary-gradient: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      --accent-color: #3b82f6;
+      --text-main: #ffffff;
+      --text-muted: #a1a1aa;
+      
+      --radius-lg: 20px;
+      --radius-md: 12px;
+      --radius-pill: 50px;
+      
+      --font-body: 'Inter', sans-serif;
+      --font-head: 'Poppins', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: var(--font-body);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* --- 2. HEADER --- */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(5, 5, 5, 0.8);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-color);
+      padding: 15px 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #logo {
+      height: 45px;
+      object-fit: contain;
+    }
+
+    /* --- 3. CONTAINER --- */
+    .container {
+      max-width: 600px;
+      width: 90%;
+      margin: 40px auto;
+      background: rgba(18, 18, 18, 0.6);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border-color);
+      border-radius: 24px;
+      padding: 40px;
+      box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
+      animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h2 {
+      font-family: var(--font-head);
+      color: var(--text-main);
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    /* --- 4. PROFILE INFO --- */
+    .profile-info {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      margin-bottom: 40px;
+    }
+
+    .info-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .info-item:last-child { border-bottom: none; }
+
+    .label {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    #displayName, #userEmail {
+      color: var(--text-main);
+      font-weight: 600;
+      padding: 4px 8px;
+      border-radius: 6px;
+      transition: all 0.2s;
+    }
+    
+    #displayName:hover {
+      background: rgba(59, 130, 246, 0.15);
+      color: var(--accent-color);
+      cursor: pointer;
+    }
+
+    /* Input inside display name edit */
+    #nameInput {
+      background: #000;
+      border: 1px solid var(--accent-color);
+      color: white;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-family: inherit;
+      width: 150px;
+      outline: none;
+    }
+
+    /* --- 5. PASSWORD FORM (Floating Labels) --- */
+    .password-form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .input-field {
+      position: relative;
+    }
+
+    .input-field input {
+      width: 100%;
+      padding: 16px 15px;
+      background: #09090b;
+      border: 1px solid #333;
+      border-radius: 12px;
+      color: white;
+      font-size: 16px;
+      outline: none;
+      transition: 0.2s;
+    }
+    
+    .input-field input:focus {
+      border-color: var(--accent-color);
+      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+    }
+
+    .input-field label {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #71717a;
+      pointer-events: none;
+      transition: 0.2s ease all;
+      background: #09090b;
+      padding: 0 5px;
+      font-size: 15px;
+    }
+
+    .input-field input:focus + label,
+    .input-field input:not(:placeholder-shown) + label,
+    .input-field.filled label {
+      top: 0;
+      font-size: 12px;
+      color: var(--accent-color);
+    }
+
+    /* --- 6. BUTTONS --- */
+    button {
+      position: relative;
+      background: var(--primary-gradient);
+      color: white;
+      padding: 14px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1rem;
+      width: 100%;
+      overflow: hidden;
+      transition: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+    }
+
+    button:hover {
+      transform: translateY(-2px) scale(1.01);
+      box-shadow: 0 10px 25px rgba(59, 130, 246, 0.5);
+    }
+
+    /* Ripple Effect */
+    button .ripple {
+      position: absolute;
+      background: rgba(255,255,255,0.3);
+      border-radius: 50%;
+      transform: scale(0);
+      animation: ripple 0.6s linear;
+      pointer-events: none;
+    }
+
+    @keyframes ripple {
+      to { transform: scale(4); opacity: 0; }
+    }
+
+    /* Logout Button */
+    #logoutBtn {
+      margin-top: 30px;
+      background: linear-gradient(135deg, #ef4444, #b91c1c);
+      box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+    }
+
+    #logoutBtn:hover {
+      box-shadow: 0 10px 25px rgba(239, 68, 68, 0.5);
+    }
+
+    /* Messages */
+    #messageBox {
+      margin-top: 15px;
+      padding: 12px;
+      border-radius: 8px;
+      text-align: center;
+      font-weight: 500;
+      font-size: 0.9rem;
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+    .error { background: rgba(239, 68, 68, 0.1); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.3); }
+    .success { background: rgba(34, 197, 94, 0.1); color: #86efac; border: 1px solid rgba(34, 197, 94, 0.3); }
+
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    /* --- 7. HAMBURGER & MENU --- */
+    .hamburger {
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 28px;
+      height: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      cursor: pointer;
+      z-index: 1100;
+    }
+
+    .hamburger span {
+      display: block;
+      height: 2px;
+      width: 100%;
+      background: white;
+      border-radius: 2px;
+      transition: all 0.3s ease-in-out;
+    }
+
+    .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 6px); }
+    .hamburger.active span:nth-child(2) { opacity: 0; }
+    .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -6px); }
+
+    .menu {
+      position: fixed;
+      top: 0;
+      right: -300px;
+      width: 280px;
+      height: 100vh;
+      background: rgba(20, 20, 20, 0.95);
+      backdrop-filter: blur(20px);
+      border-left: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      padding-top: 80px;
+      transition: right 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+      z-index: 1000;
+      box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+    }
+
+    .menu.active { right: 0; }
+
+    .menu a {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 16px 25px;
+      text-decoration: none;
+      color: var(--text-muted);
+      font-size: 16px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      border-left: 3px solid transparent;
+    }
+
+    .menu a:hover {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .menu a.active {
+      color: var(--accent-color);
+      background: rgba(59, 130, 246, 0.05);
+      border-left-color: var(--accent-color);
+    }
+
+    .menu-icon, .menu-logo { width: 20px; height: 20px; object-fit: contain; opacity: 0.8; }
+    .menu a:hover .menu-icon { opacity: 1; }
+
+    /* --- 8. FOOTER & SOCIAL --- */
+   .social-buttons {
+display: flex;
+justify-content: center;
+gap: 15px;
+margin: 20px 0 40px;
+}
+
+.social-btn {
+display: flex;
+align-items: center;
+gap: 10px;
+padding: 12px 24px;
+border-radius: var(--radius-pill);
+background: #1f1f22;
+color: white;
+text-decoration: none;
+font-weight: 500;
+transition: 0.3s;
+border: 1px solid transparent;
+font-family: var(--font-body);
+font-size: 0.95rem;
+}
+
+.social-btn:hover {
+background: #27272a;
+border-color: rgba(255,255,255,0.1);
+transform: translateY(-2px);
+}
+
+.social-btn.insta:hover { color: #e1306c; border-color: #e1306c; }
+.social-btn.telegram:hover { color: #0088cc; border-color: #0088cc; }
+
+.social-logo {
+width: 22px;
+height: 22px;
+object-fit: contain;
+}
+
+    footer {
+      border-top: 1px solid var(--border-color);
+      padding: 40px 20px;
+      text-align: center;
+      background: #020202;
+      margin-top: auto;
+    }
+
+    .madeby {
+      font-weight: 600;
+      margin-bottom: 10px;
+      background: linear-gradient(90deg, #60a5fa, #a78bfa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    footer a { color: var(--text-muted); text-decoration: none; margin: 0 10px; font-size: 0.9rem; }
+    footer a:hover { color: white; }
+
+    /* Mobile Responsive */
+    @media (max-width: 600px) {
+      .container { padding: 25px; margin: 20px auto; width: 95%; }
+      h2 { font-size: 1.3rem; }
+    }
+    .social-btn.youtube:hover {
+  color: #ff0000;
+  border-color: #ff0000;
+  box-shadow: 0 0 14px rgba(255, 0, 0, 0.35);
+}
+.menu i {
+  font-size: 20px;
+  opacity: 0.85;
+}
+
+.menu a:hover i {
+  opacity: 1;
+}
+.theme-switcher {
+  display: flex;
+  gap: 16px;
+  margin: 15px 0 40px;
+}
+
+.theme-circle {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: 0.3s;
+}
+
+.theme-circle:hover {
+  transform: scale(1.1);
+  border-color: var(--accent-color);
+}
+
+/* Colors */
+.theme-circle.dark { background: #050505; }
+.theme-circle.navy { background: #020617; }
+.theme-circle.red { background: #b91c1c; }
+.theme-circle.light { background: #ffffff; border: 1px solid #ccc; }
+
+/* Active */
+.theme-circle.active {
+  box-shadow: 0 0 0 3px var(--accent-color);
+}
+
+  </style>
+  <link rel="stylesheet" href="theme.css">
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <a href="index.html">
+      <img src="logo.png" alt="BOOKStore" id="logo">
+    </a>
+    
+    <div class="hamburger" id="hamburger">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </header>
+
+  <!-- SIDE MENU -->
+ <nav class="menu" id="menu">
+
+  <a href="index.html">
+    <i class="ph ph-house"></i> Home
+  </a>
+
+  <a href="edupie.html">
+    <i class="ph ph-graduation-cap"></i> EduPie
+  </a>
+
+  <a href="games.html">
+    <i class="ph ph-game-controller"></i> Games Zone
+  </a>
+
+  <a href="play.html">
+    <i class="ph ph-play-circle"></i> Custom Player
+  </a>
+
+  <a href="link.html">
+    <i class="ph ph-link"></i> Link Processor
+  </a>
+
+  <a href="profile.html" class="active">
+    <i class="ph ph-user"></i> Profile
+  </a>
+
+</nav>
+
+  <!-- MAIN CONTENT -->
+  <div class="container" id="accountContainer">
+    <h2>Appearance</h2>
+
+<div class="theme-switcher">
+  <div class="theme-circle dark" data-theme="dark" title="Dark"></div>
+  <div class="theme-circle navy" data-theme="navy" title="Navy Blue"></div>
+  <div class="theme-circle red" data-theme="red" title="Red"></div>
+</div>
+
+    <h2>Account Settings</h2>
+    
+    <!-- Profile Info -->
+    <div id="profileDetails">
+        <!-- JS Injected -->
+    </div>
+    
+    <!-- Password Change -->
+    <h2>Security</h2>
+    <div class="password-form">
+      <div class="input-field">
+        <input type="password" id="currentPassword" placeholder=" " required>
+        <label for="currentPassword">Current Password</label>
+      </div>
+
+      <div class="input-field">
+        <input type="password" id="newPassword" placeholder=" " required>
+        <label for="newPassword">New Password (min 6 chars)</label>
+      </div>
+
+      <div class="input-field">
+        <input type="password" id="confirmNewPassword" placeholder=" " required>
+        <label for="confirmNewPassword">Confirm New Password</label>
+      </div>
+
+      <button id="changePasswordBtn">Update Password</button>
+    </div>
+    
+    <div id="messageBox"></div>
+
+    <button id="logoutBtn">Log Out</button>
+  </div>
+
+  <!-- SOCIAL LINKS -->
+ <div class="social-buttons">
+  <a href="https://www.youtube.com/@bookstoreofficial"
+     target="_blank"
+     class="social-btn youtube"
+     title="Subscribe on YouTube"
+     aria-label="Subscribe on YouTube">
+    <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png"
+         alt="YouTube"
+         class="social-logo">
+    YouTube
+  </a>
+<a href="https://www.instagram.com/bookstoreofficial_0/" target="_blank" class="social-btn insta">
+<img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram" class="social-logo">
+Instagram
+</a>
+<a href="https://t.me/+oQOMU7yAIIE2OWVl" target="_blank" class="social-btn telegram">
+<img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" alt="Telegram" class="social-logo">
+Telegram
+</a>
+</div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="madeby">Made by Bhavesh</div>
+    <p style="color: #666; font-size: 0.85rem; margin-bottom: 10px;">© 2025 BOOKStore. All rights reserved.</p>
+    <div>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="about.html">About Us</a>
+    </div>
+  </footer>
+
+  <script>
+    // --- 1. FIREBASE CONFIG ---
+    const firebaseConfig = {
+      apiKey: "AIzaSyCcpG-oEqkDprgTwWXKt5CFsttjAQAZFNg",
+      authDomain: "bookstore-6ab08.firebaseapp.com",
+      projectId: "bookstore-6ab08",
+      storageBucket: "bookstore-6ab08.firebasestorage.app",
+      messagingSenderId: "102226032749",
+      appId: "1:102226032749:web:f7090175d2e53c2f522764",
+      measurementId: "G-R9N7YSCMY0"
+    };
+
+    const app = firebase.initializeApp(firebaseConfig);
+    const auth = app.auth();
+
+    // --- 2. DOM ELEMENTS ---
+    const profileDetails = document.getElementById("profileDetails");
+    const currentPasswordField = document.getElementById("currentPassword");
+    const newPasswordField = document.getElementById("newPassword");
+    const confirmNewPasswordField = document.getElementById("confirmNewPassword");
+    const changePasswordBtn = document.getElementById("changePasswordBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const messageBox = document.getElementById("messageBox");
+    const hamburger = document.getElementById("hamburger");
+    const menu = document.getElementById("menu");
+
+    let currentUser = null;
+
+    // --- 3. MENU LOGIC ---
+    hamburger.addEventListener("click", (e) => {
+      e.stopPropagation();
+      hamburger.classList.toggle("active");
+      menu.classList.toggle("active");
+    });
+
+    document.addEventListener("click", (e) => {
+      if (!menu.contains(e.target) && !hamburger.contains(e.target)) {
+        menu.classList.remove("active");
+        hamburger.classList.remove("active");
+      }
+    });
+
+    // --- 4. PROFILE LOGIC ---
+    function displayMessage(msg, isError = false) {
+      messageBox.textContent = msg;
+      messageBox.className = isError ? 'error' : 'success';
+      messageBox.style.display = 'block';
+      setTimeout(() => messageBox.style.display = 'none', 5000);
+    }
+
+    function renderProfile(user) {
+      currentUser = user;
+      const displayName = user.displayName || (user.email ? user.email.split('@')[0] : 'User');
+      const email = user.email || 'N/A';
+      
+      profileDetails.innerHTML = `
+        <div class="profile-info">
+          <div class="info-item">
+            <span class="label">Display Name</span>
+            <span id="displayName" title="Double-click to edit">${displayName}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Email Address</span>
+            <span id="userEmail">${email}</span>
+          </div>
+        </div>
+      `;
+      setupNameEdit(user);
+    }
+
+    function setupNameEdit(user) {
+      const nameSpan = document.getElementById('displayName');
+      if (!nameSpan) return;
+
+      nameSpan.ondblclick = () => {
+        const currentName = nameSpan.textContent.trim();
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.value = currentName;
+        input.id = 'nameInput';
+        
+        nameSpan.replaceWith(input);
+        input.focus();
+
+        const save = async () => {
+          const newName = input.value.trim();
+          if (newName && newName !== currentName) {
+            try {
+              await user.updateProfile({ displayName: newName });
+              displayMessage("Display name updated!", false);
+              renderProfile(user); // Re-render to reset span
+            } catch (e) {
+              displayMessage("Failed: " + e.message, true);
+              renderProfile(user);
+            }
+          } else {
+            renderProfile(user); // Revert
+          }
+        };
+
+        input.onblur = save;
+        input.onkeydown = (e) => { if(e.key === 'Enter') save(); };
+      };
+    }
+
+    // --- 5. PASSWORD LOGIC ---
+    changePasswordBtn.onclick = async () => {
+      const user = currentUser;
+      if (!user) return displayMessage("Not logged in.", true);
+      
+      const current = currentPasswordField.value;
+      const newPass = newPasswordField.value;
+      const confirmPass = confirmNewPasswordField.value;
+
+      if (!current || !newPass || !confirmPass) return displayMessage("All fields required.", true);
+      if (newPass !== confirmPass) return displayMessage("New passwords mismatch.", true);
+      if (newPass.length < 6) return displayMessage("Password too short.", true);
+      
+      changePasswordBtn.disabled = true;
+      changePasswordBtn.textContent = 'Updating...';
+
+      try {
+        const credential = firebase.auth.EmailAuthProvider.credential(user.email, current);
+        await user.reauthenticateWithCredential(credential);
+        await user.updatePassword(newPass);
+        
+        displayMessage("Password updated! Please log in again.", false);
+        setTimeout(() => auth.signOut(), 2000);
+      } catch (error) {
+        displayMessage("Error: " + error.message, true);
+      } finally {
+        changePasswordBtn.disabled = false;
+        changePasswordBtn.textContent = 'Update Password';
+      }
+    };
+
+    // --- 6. LOGOUT ---
+    logoutBtn.onclick = async () => {
+      try {
+        await auth.signOut();
+        window.location.href = "index.html";
+      } catch (e) {
+        displayMessage(e.message, true);
+      }
+    };
+
+    // --- 7. AUTH LISTENER ---
+    auth.onAuthStateChanged((user) => {
+      if (!user) {
+        window.location.href = "index.html";
+      } else {
+        renderProfile(user);
+      }
+    });
+
+    // --- 8. UI INTERACTIONS ---
+    // Floating Labels
+    document.querySelectorAll('.input-field input').forEach(input => {
+      const update = () => {
+        input.parentElement.classList.toggle("filled", input.value.trim() !== "");
+      };
+      input.addEventListener("input", update);
+      update();
+    });
+
+    // Ripple Effect
+    document.querySelectorAll('button').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        const ripple = document.createElement('span');
+        ripple.classList.add('ripple');
+        this.appendChild(ripple);
+        
+        const rect = this.getBoundingClientRect();
+        ripple.style.left = `${e.clientX - rect.left}px`;
+        ripple.style.top = `${e.clientY - rect.top}px`;
+        
+        setTimeout(() => ripple.remove(), 600);
+      });
+    });
+
+    // Security
+    document.addEventListener("contextmenu", e => e.preventDefault());
+    document.addEventListener("keydown", e => {
+      if ((e.ctrlKey && ["s","u","p"].includes(e.key.toLowerCase())) || e.key === "PrintScreen") {
+        e.preventDefault();
+        alert("Protected Content");
+      }
+    });
+    // --- 9. THEME SWITCHER ---
+const themeCircles = document.querySelectorAll(".theme-circle");
+const savedTheme = localStorage.getItem("theme") || "dark";
+
+setTheme(savedTheme);
+
+themeCircles.forEach(circle => {
+  circle.addEventListener("click", () => {
+    const theme = circle.dataset.theme;
+    setTheme(theme);
+    localStorage.setItem("theme", theme);
+  });
+});
+
+function setTheme(theme) {
+  localStorage.setItem("theme", theme);
+
+  if (theme === "dark") {
+    document.documentElement.removeAttribute("data-theme");
+  } else {
+    document.documentElement.setAttribute("data-theme", theme);
+  }
+}
+
+  </script>
+  <script src="theme.js"></script>
+</body>
+</html>
