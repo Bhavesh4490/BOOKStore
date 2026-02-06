@@ -160,27 +160,65 @@
       justify-content: center;
     }
 
-    #searchInput {
-      width: 100%;
-      max-width: 500px;
-      padding: 14px 20px 14px 50px;
-      border-radius: var(--radius-pill);
-      border: 1px solid var(--border-color);
-      background: #111 url('https://cdn-icons-png.flaticon.com/512/622/622669.png') no-repeat 20px center;
-      background-size: 18px;
-      color: var(--text-main);
-      font-size: 15px;
-      font-family: var(--font-body);
-      transition: all 0.3s ease;
-    }
+   #searchInput {
+  width: 100%;
+  max-width: 520px;
+  padding: 15px 22px 15px 52px;
 
-    #searchInput:focus {
-      outline: none;
-      border-color: var(--accent-color);
-      background-color: #161616;
-      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
-    }
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border-color);
 
+  background:
+    url("https://cdn-icons-png.flaticon.com/512/622/622669.png")
+      no-repeat 20px center,
+    var(--bg-glass);
+
+  background-size: 18px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+
+  color: var(--text-main);
+  font-size: 15px;
+  font-family: var(--font-body);
+
+  transition: all 0.35s ease;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+}
+
+
+    /* Hover = subtle lift */
+#searchInput:hover {
+  border-color: color-mix(
+    in srgb,
+    var(--accent-color) 35%,
+    transparent
+  );
+}
+
+/* Focus = premium glow */
+#searchInput:focus {
+  outline: none;
+  background-color: var(--bg-card);
+
+  border-color: var(--accent-color);
+
+  box-shadow:
+    0 0 0 4px color-mix(
+      in srgb,
+      var(--accent-color) 18%,
+      transparent
+    ),
+    0 0 30px color-mix(
+      in srgb,
+      var(--accent-color) 35%,
+      transparent
+    );
+}
+/* Placeholder */
+#searchInput::placeholder {
+  color: var(--text-muted);
+  opacity: 0.85;
+}
     /* --- 4. PAGE TITLE --- */
     h1 {
       text-align: center;
@@ -332,7 +370,8 @@
       display: flex;
       justify-content: center;
       gap: 15px;
-      margin: 20px 0 40px;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
     }
 
     .social-btn {
@@ -341,18 +380,21 @@
       gap: 10px;
       padding: 12px 24px;
       border-radius: var(--radius-pill);
-      background: #1f1f22;
+      background: rgba(255,255,255,0.03);
       color: white;
       text-decoration: none;
       font-weight: 500;
-      transition: 0.3s;
-      border: 1px solid transparent;
+      transition: all 0.3s ease;
+      border: 1px solid var(--border-color); 
+      backdrop-filter: blur(16px);
+  
     }
 
     .social-btn:hover {
-      background: #27272a;
-      border-color: rgba(255,255,255,0.1);
-      transform: translateY(-2px);
+     transform: translateY(-2px);
+     background: rgba(59,130,246,0.12);
+     border-color: rgba(59,130,246,0.45);
+     box-shadow: 0 0 18px rgba(59,130,246,0.25);
     }
     
     .social-btn.insta:hover { color: #e1306c; border-color: #e1306c; }
