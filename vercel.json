@@ -4,12 +4,24 @@
       "src": "/cbse.html",
       "status": 301,
       "headers": {
-        "Location": "/CBSE-Syllabus"
+        "Location": "/Class10th-Syllabus"
       }
     },
     {
-      "src": "/CBSE-Syllabus",
+      "src": "/Class10th-Syllabus",
       "dest": "/cbse.html"
+    },
+
+    {
+      "src": "/oswaal.html",
+      "status": 301,
+      "headers": {
+        "Location": "/Oswaal-Books"
+      }
+    },
+    {
+      "src": "/Oswaal-Books",
+      "dest": "/oswaal.html"
     }
   ]
 }
