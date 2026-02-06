@@ -33,6 +33,62 @@
     {
       "src": "/Oswaal-Books",
       "dest": "/oswaal.html"
-    }
+    },
+
+     {
+      "src": "/edupie.html",
+      "status": 301,
+      "headers": {
+        "Location": "/EduPie"
+      }
+    },
+    {
+      "src": "/EduPie",
+      "dest": "/edupie.html"
+    },
+    {
+      "src": "/games.html",
+      "status": 301,
+      "headers": {
+        "Location": "/Games-Zone"
+      }
+    },
+    {
+      "src": "/Games-Zone",
+      "dest": "/games.html"
+    },
+    {
+      "src": "/Sudoku.html",
+      "status": 301,
+      "headers": {
+        "Location": "/Sudoku"
+      }
+    },
+    {
+      "src": "/Sudoku",
+      "dest": "/Sudoku.html"
+    },
+    {
+      "src": "/2048.html",
+      "status": 301,
+      "headers": {
+        "Location": "/2048"
+      }
+    },
+    {
+      "src": "/2048",
+      "dest": "/2048.html"
+    },
+    {
+      "src": "/josh.html",
+      "status": 301,
+      "headers": {
+        "Location": "/100x-Josh"
+      }
+    },
+    {
+      "src": "/100x-Josh",
+      "dest": "/josh.html"
+    },
   ]
 }
