@@ -1,0 +1,12 @@
+{
+  "routes": [
+    {
+      "src": "/cbse.html",
+      "status": 404
+    },
+    {
+      "src": "/cbse",
+      "dest": "/cbse.html"
+    }
+  ]
+}
