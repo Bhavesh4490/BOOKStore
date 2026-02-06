@@ -405,28 +405,31 @@
       display: flex;
       justify-content: center;
       gap: 15px;
-      margin: 20px 0 40px;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
     }
 
-
-       .social-btn {
+    .social-btn {
       display: flex;
       align-items: center;
       gap: 10px;
       padding: 12px 24px;
-      border-radius: 40px;
-      background: var(--bg-glass);
-       color: var(--text-main);
+      border-radius: var(--radius-pill);
+      background: rgba(255,255,255,0.03);
+      color: white;
       text-decoration: none;
       font-weight: 500;
-      transition: 0.3s;
-       border: 1px solid var(--border-color);
+      transition: all 0.3s ease;
+      border: 1px solid var(--border-color); 
+      backdrop-filter: blur(16px);
+  
     }
 
     .social-btn:hover {
-      background: #27272a;
-      border-color: rgba(255,255,255,0.1);
-      transform: translateY(-2px);
+     transform: translateY(-2px);
+     background: rgba(59,130,246,0.12);
+     border-color: rgba(59,130,246,0.45);
+     box-shadow: 0 0 18px rgba(59,130,246,0.25);
     }
     
     .social-btn.insta:hover { color: #e1306c; border-color: #e1306c; }
