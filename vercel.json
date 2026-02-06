@@ -4,11 +4,11 @@
       "src": "/cbse.html",
       "status": 301,
       "headers": {
-        "Location": "/cbse"
+        "Location": "/CBSE-Syllabus"
       }
     },
     {
-      "src": "/cbse",
+      "src": "/CBSE-Syllabus",
       "dest": "/cbse.html"
     }
   ]
