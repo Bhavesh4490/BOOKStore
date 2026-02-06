@@ -90,5 +90,82 @@
       "src": "/100x-Josh",
       "dest": "/josh.html"
     },
+     {
+      "src": "/play.html",
+      "status": 301,
+      "headers": {
+        "Location": "/Player"
+      }
+    },
+    {
+      "src": "/Player",
+      "dest": "/play.html"
+    },
+    {
+      "src": "/link.html",
+      "status": 301,
+      "headers": {
+        "Location": "/Link-Processor"
+      }
+    },
+    {
+      "src": "/Link-Processor",
+      "dest": "/link.html"
+    },
+    {
+      "src": "/profile.html",
+      "status": 301,
+      "headers": {
+        "Location": "/My-Account"
+      }
+    },
+    {
+      "src": "/My-Account",
+      "dest": "/profile.html"
+    },
+    {
+      "src": "/index.html",
+      "status": 301,
+      "headers": {
+        "Location": "/Home"
+      }
+    },
+    {
+      "src": "/Home",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/404.html",
+      "status": 301,
+      "headers": {
+        "Location": "/Error"
+      }
+    },
+    {
+      "src": "/Error",
+      "dest": "/404.html"
+    },
+    {
+      "src": "/privacy.html",
+      "status": 301,
+      "headers": {
+        "Location": "/Privacy-Policy"
+      }
+    },
+    {
+      "src": "/Privacy-Policy",
+      "dest": "/privacy.html"
+    },
+    {
+      "src": "/about.html",
+      "status": 301,
+      "headers": {
+        "Location": "/About-Us"
+      }
+    },
+    {
+      "src": "/About-Us",
+      "dest": "/about.html"
+    },
   ]
 }
