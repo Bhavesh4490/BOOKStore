@@ -1,6 +1,17 @@
 {
   "routes": [
     {
+      "src": "/admin.html",
+      "status": 301,
+      "headers": {
+        "Location": "/Admin-Panel"
+      }
+    },
+    {
+      "src": "/Admin-Panel",
+      "dest": "/admin.html"
+    },
+    {
       "src": "/cbse.html",
       "status": 301,
       "headers": {
