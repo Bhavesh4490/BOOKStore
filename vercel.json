@@ -34,6 +34,17 @@
       "src": "/Oswaal-Books",
       "dest": "/oswaal.html"
     },
+    {
+      "src": "/nidar.html",
+      "status": 301,
+      "headers": {
+        "Location": "/Nidar-Series"
+      }
+    },
+    {
+      "src": "/Nidar-Series",
+      "dest": "/nidar.html"
+    },
 
      {
       "src": "/edupie.html",
