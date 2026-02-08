@@ -860,6 +860,192 @@
 .security-item:hover {
   color: #e5e7eb;
 }
+/* ===== NIDAR SERIES IMAGE FIX ===== */
+#nidarSeriesBox .collection-img {
+  height: 110px;          /* Bigger logo */
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  filter: none;           /* Remove dull effect */
+}
+
+/* Mobile optimization */
+@media (max-width: 600px) {
+  #nidarSeriesBox .collection-img {
+    height: 90px;
+  }
+}
+#nidarSeriesBox {
+  border: 1px solid color-mix(in srgb, var(--accent-color) 45%, transparent);
+  box-shadow:
+    0 12px 30px rgba(0,0,0,0.6),
+    0 0 30px color-mix(in srgb, var(--accent-color) 20%, transparent);
+}
+
+#nidarSeriesBox:hover .collection-img {
+  transform: scale(1.12);
+}
+/* ===== NIDAR IMAGE FULL-WIDTH (1cm GAP) ===== */
+#nidarSeriesBox {
+  padding: 20px; /* keeps inner spacing clean */
+}
+
+#nidarSeriesBox .collection-img {
+  width: calc(100% - 2cm); /* 1cm gap on left + right */
+  height: auto;
+  max-height: 140px;       /* prevents it from getting TOO tall */
+  object-fit: contain;
+  margin: 0 auto 15px;     /* center + bottom gap */
+  display: block;
+  filter: none;
+}
+
+/* Mobile refinement */
+@media (max-width: 600px) {
+  #nidarSeriesBox .collection-img {
+    width: calc(100% - 1.6cm); /* slightly tighter on mobile */
+    max-height: 120px;
+  }
+}
+/* ===== NIDAR SERIES – HERO PREMIUM CARD ===== */
+#nidarSeriesBox {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(139, 92, 246, 0.15),
+      transparent 60%
+    ),
+    linear-gradient(180deg, rgba(18,18,18,0.95), rgba(10,10,10,0.95));
+  
+  border-radius: 22px;
+  border: 1px solid rgba(139, 92, 246, 0.45);
+  box-shadow:
+    0 20px 50px rgba(0,0,0,0.7),
+    0 0 40px rgba(139, 92, 246, 0.25);
+
+  transition: all 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* glowing border animation */
+#nidarSeriesBox::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(139, 92, 246, 0.6),
+    rgba(59, 130, 246, 0.6),
+    transparent
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+#nidarSeriesBox:hover::before {
+  opacity: 1;
+}
+
+/* hover lift */
+#nidarSeriesBox:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow:
+    0 30px 70px rgba(0,0,0,0.85),
+    0 0 55px rgba(139, 92, 246, 0.35);
+}
+
+/* ===== IMAGE (CINEMATIC) ===== */
+#nidarSeriesBox .collection-img {
+  width: 100%;
+  max-height: 150px;
+  object-fit: contain;
+  margin-bottom: 18px;
+  transform: scale(1);
+  transition: transform 0.45s ease, filter 0.45s ease;
+  filter: drop-shadow(0 10px 25px rgba(0,0,0,0.6));
+}
+
+#nidarSeriesBox:hover .collection-img {
+  transform: scale(1.12);
+}
+
+/* ===== TITLE ===== */
+#nidarSeriesBox .collection-title {
+  font-size: 1.4rem;
+  font-family: var(--font-head);
+  font-weight: 700;
+  margin-bottom: 6px;
+  background: linear-gradient(90deg, #facc15, #f59e0b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: 0.5px;
+}
+
+/* ===== DESCRIPTION ===== */
+#nidarSeriesBox .collection-desc {
+  font-size: 0.9rem;
+  color: #d4d4d8;
+  margin-bottom: 18px;
+  line-height: 1.4;
+}
+
+/* ===== EXPLORE BUTTON (BOSS LEVEL) ===== */
+#nidarExploreBtn {
+  background: linear-gradient(135deg, #facc15, #f59e0b);
+  color: #000;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  border: none;
+  border-radius: 999px;
+  padding: 14px 0;
+  font-size: 0.95rem;
+  position: relative;
+  overflow: hidden;
+  box-shadow:
+    0 10px 25px rgba(250, 204, 21, 0.45);
+  transition: all 0.3s ease;
+}
+
+#nidarExploreBtn::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: rgba(255,255,255,0.35);
+  transform: rotate(25deg) translate(-120%, -120%);
+  transition: transform 0.6s ease;
+}
+
+#nidarExploreBtn:hover::after {
+  transform: rotate(25deg) translate(120%, 120%);
+}
+
+#nidarExploreBtn:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 15px 40px rgba(250, 204, 21, 0.7);
+}
+
+/* ===== MOBILE POLISH ===== */
+@media (max-width: 600px) {
+  #nidarSeriesBox {
+    padding: 20px;
+  }
+
+  #nidarSeriesBox .collection-img {
+    max-height: 120px;
+  }
+
+  #nidarSeriesBox .collection-title {
+    font-size: 1.25rem;
+  }
+}
 
   </style>
   <link rel="stylesheet" href="theme.css">
@@ -1025,6 +1211,27 @@
     </div>
   </div>
 
+<!-- BROWSE SERIES -->
+<h2 class="section-title">Browse Series</h2>
+
+<div class="folders hide-during-preview">
+  <div class="collection-box" id="nidarSeriesBox">
+    <img src="nidar.png" class="collection-img" alt="Nidar Series"
+         onerror="this.src='https://via.placeholder.com/100?text=NIDAR'">
+
+    <div class="collection-title">Nidar Series</div>
+    <div class="collection-desc">
+      Board-focused premium series for fearless toppers
+    </div>
+
+    <button
+      class="preview-btn"
+      id="nidarExploreBtn"
+      style="margin-top:15px; width:100%;">
+      Explore
+    </button>
+  </div>
+</div>
 
   <!-- COLLECTIONS -->
   <h2 class="section-title">Browse Publishers</h2>
@@ -1287,6 +1494,26 @@ auth.onAuthStateChanged(user => {
   });
 
 });
+  const nidarBtn = document.getElementById("nidarExploreBtn");
+
+  function updateNidarButton(user) {
+    if (user) {
+      nidarBtn.innerText = "Explore";
+      nidarBtn.onclick = () => {
+        window.location.href = "nidar.html";
+      };
+    } else {
+      nidarBtn.innerText = "Login to Explore";
+      nidarBtn.onclick = () => {
+        loginPopup.style.display = "flex";
+        setTimeout(() => loginPopup.classList.add("show"), 10);
+      };
+    }
+  }
+
+  auth.onAuthStateChanged(user => {
+    updateNidarButton(user);
+  });
 
     // --- 5. USER DISPLAY LOGIC ---
     function initUser(user) {
