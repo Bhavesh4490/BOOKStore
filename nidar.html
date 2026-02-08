@@ -3,11 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nidar Series | BOOKStore</title>
+  <title>BOOKStore - Premium Study Material</title>
 
-  <meta name="description" content="The Most Expected Questions are here Check Out Now!!!">
+  <meta name="description" content="BOOKStore offers Oswaal PDFs, solved papers, sample papers, 100x-Josh videos, science notes, SST notes and more for Class 10 students.">
+  <meta name="keywords" content="bookstore, class 10, ncert, oswaal, pdfs, books, study material, cbse, sample papers, solved papers, study website">
+  
+  <!-- WhatsApp / Open Graph -->
+<meta property="og:title" content="BOOKStore – Your Study Partner">
+<meta property="og:description" content="Get free books, notes, PDFs, Oswaal, CBSE study material and more.">
+<meta property="og:image" content="https://bookstore-nt.vercel.app/click.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1500">
+<meta property="og:image:height" content="787">
+<meta property="og:url" content="https://bookstore-nt.vercel.app/">
+<meta property="og:type" content="website">
+
+
+  <!-- Favicon -->
   <link rel="icon" type="image/png" href="book.png">
 <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
 
   <!-- Fonts: Inter & Poppins -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,6 +31,10 @@
   
   <!-- Google Icons -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
 
   <style>
     /* --- 1. VARIABLES & RESET --- */
@@ -60,18 +79,19 @@
 
     /* --- 2. HEADER & NAVIGATION --- */
     header {
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      background: rgba(5, 5, 5, 0.8);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-bottom: 1px solid var(--border-color);
-      padding: 15px 20px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: rgba(5, 5, 5, 0.8);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border-color);
+  padding: 15px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 
     #logo {
       height: 45px;
@@ -102,6 +122,7 @@
       transition: all 0.3s ease-in-out;
     }
 
+    /* Hamburger Active State */
     .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 6px); }
     .hamburger.active span:nth-child(2) { opacity: 0; }
     .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -6px); }
@@ -154,13 +175,14 @@
     .menu a:hover .menu-icon { opacity: 1; }
 
     /* --- 3. SEARCH BAR --- */
-    #searchBar {
-      padding: 20px 5%;
-      display: flex;
-      justify-content: center;
-    }
+    /* --- SEARCH BAR (THEME AWARE / GLASS) --- */
+#searchBar {
+  padding: 22px 5%;
+  display: flex;
+  justify-content: center;
+}
 
-   #searchInput {
+#searchInput {
   width: 100%;
   max-width: 520px;
   padding: 15px 22px 15px 52px;
@@ -185,8 +207,7 @@
   box-shadow: 0 10px 30px rgba(0,0,0,0.45);
 }
 
-
-    /* Hover = subtle lift */
+/* Hover = subtle lift */
 #searchInput:hover {
   border-color: color-mix(
     in srgb,
@@ -214,29 +235,119 @@
       transparent
     );
 }
+
 /* Placeholder */
 #searchInput::placeholder {
   color: var(--text-muted);
   opacity: 0.85;
 }
-    /* --- 4. PAGE TITLE --- */
-h1 {
+
+
+    /* --- 4. GREETING & BUTTONS --- */
+    #greeting {
       text-align: center;
-      margin: 20px 0 30px;
-      font-family: var(--font-head);
-      font-size: 1.8rem;
-      background: linear-gradient(90deg, #fff, #a1a1aa);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      margin-bottom: 10px;
+      font-size: 1.1rem;
+      font-weight: 500;
     }
-.subtitle{
-  text-align:center;
-  color:var(--muted);
-  margin-bottom:35px;
-  font-size:.95rem;
+    
+    #greeting span { color: var(--accent-color); }
+    #greeting .vip { color: #facc15; text-shadow: 0 0 10px rgba(250, 204, 21, 0.3); animation: none; }
+    #greeting .Admin { color: #ef4444; text-shadow: 0 0 10px rgba(239, 68, 68, 0.3); animation: none; }
+    
+   #adminBtn {
+  display: none;
+  margin: 0 auto 20px;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6, #06b6d4);
+  color: white;
+  border: none;
+  padding: 12px 28px;
+  border-radius: 50px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 1rem;
+  box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease-in-out;
 }
 
-    /* --- 5. BOOK CARDS --- */
+#adminBtn::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: rgba(255, 255, 255, 0.15);
+  transform: rotate(45deg) translate(-100%, -100%);
+  transition: all 0.5s ease-in-out;
+}
+
+#adminBtn:hover::before {
+  transform: rotate(45deg) translate(100%, 100%);
+}
+
+#adminBtn:hover {
+  box-shadow: 0 0 25px rgba(59, 130, 246, 0.6);
+  transform: scale(1.05);
+}
+
+
+    /* --- 5. BANNERS / CAROUSEL --- */
+    .banner-container {
+      position: relative;
+      width: 90%;
+      max-width: 1000px;
+      margin: 10px auto 20px;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid var(--border-color);
+      aspect-ratio: 16/9;
+    }
+    
+    @media (min-width: 768px) { .banner-container { aspect-ratio: 5/1; } }
+    
+    .banner-slide {
+      display: flex;
+      transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+    
+    .banner-item {
+      min-width: 100%;
+      position: relative;
+    }
+    
+    .banner-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Dots */
+    .dots {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 30px;
+    }
+    .dot {
+      width: 8px;
+      height: 8px;
+      background: #444;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .dot.active {
+      background: var(--text-main);
+      width: 20px;
+      border-radius: 10px;
+    }
+
+    /* --- 6. BOOK CARDS --- */
     .books {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -247,27 +358,31 @@ h1 {
     }
 
     .book {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-md);
-      padding: 15px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      position: relative;
-      overflow: hidden;
-    }
+  background: rgba(18, 18, 18, 0.6);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 15px;
+  transition: all 0.35s ease;
+}
 
-    .book:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 15px 30px rgba(0,0,0,0.4);
-      border-color: rgba(255,255,255,0.2);
-    }
+
+   .book:hover {
+  transform: translateY(-6px);
+  border-color: color-mix(in srgb, var(--accent-color) 45%, transparent);
+  box-shadow: 0 0 35px color-mix(
+    in srgb,
+    var(--accent-color) 25%,
+    transparent
+  );
+}
+
+
 
     .book img {
       width: 100%;
-      height: 220px;
+      height: 280px;
       object-fit: cover;
       border-radius: 8px;
       margin-bottom: 15px;
@@ -276,15 +391,6 @@ h1 {
 
     .book:hover img { transform: scale(1.05); }
 
-    /* Wrapper for text content */
-    .book-content {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      flex: 1;
-    }
-
     .book h3 {
       font-family: var(--font-head);
       font-size: 1rem;
@@ -292,7 +398,6 @@ h1 {
       margin-bottom: 5px;
       text-align: center;
       line-height: 1.4;
-      color: var(--text-main);
     }
 
     .book-meta {
@@ -303,33 +408,225 @@ h1 {
     }
 
     .price {
-      margin: 10px 0;
-      font-weight: 600;
-      font-size: 0.95rem;
-    }
+  margin: 10px 0;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-align: center;
+}
+
     .price span { color: #22c55e; } /* Green */
 
     .preview-btn {
-      margin-top: auto;
-      background: var(--primary-gradient);
-      color: white;
-      border: none;
-      padding: 10px 24px;
-      border-radius: var(--radius-pill);
-      font-size: 0.9rem;
+  margin-top: auto;
+  background: var(--primary-gradient);
+  color: white;
+  border: 1px solid color-mix(in srgb, var(--accent-color) 40%, transparent);
+  padding: 10px 24px;
+  border-radius: var(--radius-pill);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.3s ease;
+}
+
+.preview-btn:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.05);
+  box-shadow: 0 0 22px color-mix(
+    in srgb,
+    var(--accent-color) 45%,
+    transparent
+  );
+}   /* --- 7. COLLECTION BOXES --- */
+    .section-title {
+      text-align: center;
+      font-family: var(--font-head);
+      font-size: 1.5rem;
+      margin: 40px 0 20px;
+    }
+
+    .folders {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      padding: 0 5%;
+      max-width: 1200px;
+      margin: 0 auto 50px;
+    }
+
+    .collection-box {
+      background: #0f0f0f; /* Slightly lighter than bg */
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      transition: 0.3s ease;
+      position: relative;
+    }
+
+    .collection-box:hover {
+  background: color-mix(in srgb, var(--accent-color) 8%, transparent);
+  border-color: color-mix(in srgb, var(--accent-color) 40%, transparent);
+  transform: translateY(-4px);
+}
+
+    .collection-img {
+      height: 60px;
+      object-fit: contain;
+      margin-bottom: 15px;
+      filter: grayscale(20%);
+      transition: 0.3s;
+    }
+    .collection-box:hover .collection-img { filter: grayscale(0%); transform: scale(1.1); }
+
+    .collection-title {
+      color: var(--text-main);
       font-weight: 600;
-      cursor: pointer;
+      font-size: 1.1rem;
+      margin-bottom: 5px;
+    }
+
+    .collection-desc { font-size: 0.85rem; color: var(--text-muted); }
+
+.collection-box {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(18px);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 22px;
+  transition: all 0.3s ease;
+}
+
+    /* --- 8. LOGIN POPUP (Glassmorphism + Floating Labels) --- */
+    #loginPopup {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(8px);
+      z-index: 10000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    
+    #loginPopup.show { opacity: 1; pointer-events: auto; }
+
+    #loginBox {
+      background: #18181b;
+      border: 1px solid var(--border-color);
+      padding: 40px 30px;
+      border-radius: 24px;
       width: 100%;
-      transition: filter 0.3s, transform 0.2s;
+      max-width: 400px;
+      position: relative;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      text-align: center;
     }
 
-    .preview-btn:hover {
-      filter: brightness(1.1);
-      transform: scale(1.02);
-      box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+    #closeLogin {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 24px;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    #closeLogin:hover { color: white; }
+
+    #loginBox h2 {
+      font-family: var(--font-head);
+      margin-bottom: 25px;
+      font-size: 1.8rem;
     }
 
-    /* --- 6. PDF PREVIEW (App-like) --- */
+    /* Floating Input */
+    .input-group {
+      position: relative;
+      margin-bottom: 20px;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 16px 15px;
+      background: #09090b;
+      border: 1px solid #333;
+      border-radius: 12px;
+      color: white;
+      font-size: 16px;
+      outline: none;
+      transition: 0.2s;
+    }
+    
+    .input-group input:focus { border-color: var(--accent-color); }
+
+    .input-group label {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #71717a;
+      pointer-events: none;
+      transition: 0.2s ease all;
+      background: #09090b;
+      padding: 0 5px;
+      font-size: 16px;
+    }
+
+    .input-group input:focus + label,
+    .input-group input:not(:placeholder-shown) + label {
+      top: 0;
+      font-size: 12px;
+      color: var(--accent-color);
+    }
+
+    .auth-btn {
+      width: 100%;
+      padding: 14px;
+      border-radius: 12px;
+      border: none;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.2s;
+      margin-bottom: 12px;
+    }
+
+    #emailLoginBtn { background: var(--primary-gradient); color: white; }
+    #emailLoginBtn:hover { opacity: 0.9; transform: scale(0.99); }
+
+    #googleLoginBtn {
+      background: white;
+      color: #333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    #googleLoginBtn:hover { background: #f4f4f5; }
+
+    #createAccountBtn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 0.9rem;
+      margin-top: 10px;
+    }
+    #createAccountBtn:hover { color: var(--accent-color); text-decoration: underline; }
+
+    /* --- 9. PDF PREVIEW (App-like) --- */
     #previewOverlay {
       position: fixed;
       inset: 0;
@@ -352,7 +649,7 @@ h1 {
 
     #previewHeader span { font-weight: 600; font-size: 1.1rem; }
 
-    #previewHeader button {
+    .preview-actions button {
       background: rgba(255, 255, 255, 0.1);
       border: none;
       color: white;
@@ -362,7 +659,7 @@ h1 {
       margin-left: 10px;
       font-size: 0.85rem;
     }
-    #previewHeader button.close { background: #ef4444; }
+    .preview-actions button.close { background: #ef4444; }
 
     #pdfFrame {
       flex: 1;
@@ -371,7 +668,7 @@ h1 {
       background: #111;
     }
 
-    /* --- 7. SOCIAL & FOOTER --- */
+    /* --- 10. SOCIAL & FOOTER --- */
     .social-buttons {
       display: flex;
       justify-content: center;
@@ -386,21 +683,18 @@ h1 {
       gap: 10px;
       padding: 12px 24px;
       border-radius: var(--radius-pill);
-      background: rgba(255,255,255,0.03);
+      background: #1f1f22;
       color: white;
       text-decoration: none;
       font-weight: 500;
-      transition: all 0.3s ease;
-      border: 1px solid var(--border-color); 
-      backdrop-filter: blur(16px);
-  
+      transition: 0.3s;
+      border: 1px solid transparent;
     }
 
     .social-btn:hover {
-     transform: translateY(-2px);
-     background: rgba(59,130,246,0.12);
-     border-color: rgba(59,130,246,0.45);
-     box-shadow: 0 0 18px rgba(59,130,246,0.25);
+      background: #27272a;
+      border-color: rgba(255,255,255,0.1);
+      transform: translateY(-2px);
     }
     
     .social-btn.insta:hover { color: #e1306c; border-color: #e1306c; }
@@ -411,7 +705,6 @@ h1 {
       padding: 40px 20px;
       text-align: center;
       background: #020202;
-      margin-top: auto;
     }
 
     .madeby {
@@ -425,57 +718,225 @@ h1 {
     footer a { color: var(--text-muted); text-decoration: none; margin: 0 10px; font-size: 0.9rem; }
     footer a:hover { color: white; }
 
-    /* --- 8. RESPONSIVE --- */
+    /* Helper for JS errors */
+    #authErrorBox {
+      background: rgba(220, 38, 38, 0.1);
+      border: 1px solid rgba(220, 38, 38, 0.5);
+      color: #fca5a5;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      font-size: 0.9rem;
+      display: none;
+    }
+
+    /* Responsive Tweaks */
     @media (max-width: 600px) {
       .books { grid-template-columns: 1fr; }
-      
-      .book { 
-        flex-direction: row; 
-        align-items: center; 
-        padding: 10px; 
-        text-align: left; 
-      }
-      
-      .book img { 
-        width: 80px; 
-        height: 110px; 
-        margin-bottom: 0; 
-        margin-right: 15px; 
-      }
-      
-      .book-content {
-        align-items: flex-start;
-      }
-      
-      .book h3, .book-meta { text-align: left; }
-      
-      .preview-btn { 
-        width: auto; 
-        padding: 6px 16px; 
-        font-size: 0.8rem;
-        margin-top: 8px;
-      }
+      .book { flex-direction: row; align-items: center; padding: 10px; text-align: left; }
+      .book img { width: 80px; height: 110px; margin-bottom: 0; margin-right: 15px; }
+      .book h3 { text-align: left; font-size: 1rem; margin-top: 0; }
+      .book-meta { text-align: left; }
+      .book .price { margin: 5px 0; }
+      .preview-btn { width: auto; padding: 6px 16px; font-size: 0.8rem; }
+      .book > div { flex: 1; display: flex; flex-direction: column; align-items: flex-start; }
+      /* Reset book inner structure for mobile list view if desired, otherwise keep grid */
     }
     
-    /* Small mobile tweaks */
+    /* Force Grid on mobile as per user preference in code, but refined */
     @media (max-width: 480px) {
        .books { grid-template-columns: repeat(2, 1fr); gap: 10px; }
        .book { flex-direction: column; text-align: center; }
-       .book img { width: 100%; height: 160px; margin-right: 0; margin-bottom: 10px; }
-       .book-content { align-items: center; }
-       .book h3, .book-meta { text-align: center; }
-       .preview-btn { width: 100%; margin-top: auto; }
+       .book img { width: 100%; height: 160px; margin-right: 0; }
+       .book > div { align-items: center; }
+       .preview-btn { width: 100%; }
     }
+/* Publishers vertical only on mobile */
+@media (max-width: 600px) {
+  .folders {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .collection-box {
+    flex-direction: row;
+    align-items: center;
+    text-align: left;
+    gap: 15px;
+  }
+.collection-box {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(18px);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 22px;
+  transition: all 0.3s ease;
+  box-shadow: none;
+}
+
+.collection-box:hover {
+  background: color-mix(
+    in srgb,
+    var(--accent-color) 8%,
+    transparent
+  );
+  border-color: color-mix(
+    in srgb,
+    var(--accent-color) 40%,
+    transparent
+  );
+  transform: translateY(-4px);
+
+  /* subtle premium glow (NO blue lock) */
+  box-shadow:
+    0 10px 28px rgba(0,0,0,0.45),
+    0 0 18px color-mix(
+      in srgb,
+      var(--accent-color) 18%,
+      transparent
+    );
+}
+
+  .collection-img {
+    height: 45px;
+    margin-bottom: 0;
+  }
+}
 .social-logo {
   width: 22px;
   height: 22px;
   object-fit: contain;
 }
+/* ===== Browse Series ===== */
+.batch-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 25px;
+  padding: 0 5%;
+  max-width: 1200px;
+  margin: 0 auto 50px;
+}
+
+.batch-card {
+  background: rgba(18, 18, 18, 0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-color);
+  border-radius: 22px;
+  padding: 22px;
+  transition: all 0.35s ease;
+    box-shadow: none;
+}
+.batch-card:hover {
+  transform: translateY(-6px);
+  border-color: color-mix(in srgb, var(--accent-color) 45%, transparent);
+
+  /* force theme-based shadow */
+  box-shadow:
+    0 18px 45px color-mix(
+      in srgb,
+      var(--accent-color) 28%,
+      transparent
+    ) !important;
+}
+.batch-card:hover {
+  transform: translateY(-6px);
+  border-color: color-mix(in srgb, var(--accent-color) 45%, transparent);
+  box-shadow:
+    0 12px 30px rgba(0,0,0,0.55),
+    0 0 22px color-mix(
+      in srgb,
+      var(--accent-color) 22%,
+      transparent
+    ) !important;
+}
+
+
+
+
+.batch-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 15px;
+}
+
+.batch-card h3 {
+  font-family: var(--font-head);
+  font-size: 1.1rem;
+  margin-bottom: 15px;
+}
+
+/* Tag */
+.batch-tag {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: color-mix(in srgb, var(--accent-color) 15%, transparent);
+  color: var(--accent-color);
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  backdrop-filter: blur(6px);
+  border: 1px solid color-mix(in srgb, var(--accent-color) 35%, transparent);
+}
+
+
+/* Explore Button */
+.explore-btn {
+  width: 100%;
+  padding: 12px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: white;
+  background: var(--primary-gradient);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.explore-btn:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0 26px color-mix(
+    in srgb,
+    var(--accent-color) 45%,
+    transparent
+  );
+}
+
+
+.explore-btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, transparent, rgba(255,255,255,0.35), transparent);
+  transform: translateX(-100%);
+  transition: 0.6s;
+}
+
+.explore-btn:hover::after {
+  transform: translateX(100%);
+}
+
+/* Force batch order on mobile */
+@media (max-width: 600px) {
+  .batch-grid {
+    grid-template-columns: 1fr; /* single column */
+  }
+}
+
 .social-btn.youtube:hover {
   color: #ff0000;
   border-color: #ff0000;
   box-shadow: 0 0 14px rgba(255, 0, 0, 0.35);
 }
+
 .menu i {
   font-size: 20px;
   opacity: 0.85;
@@ -484,17 +945,85 @@ h1 {
 .menu a:hover i {
   opacity: 1;
 }
+.social-btn {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border-color);
+  backdrop-filter: blur(16px);
+  transition: all 0.3s ease;
+}
+.social-btn:hover {
+  background: rgba(59,130,246,0.12);
+  border-color: rgba(59,130,246,0.45);
+  box-shadow: 0 0 18px rgba(59,130,246,0.25);
+}
+/* ===== Login Security Info ===== */
+.login-security {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.security-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  opacity: 0.9;
+}
+
+.security-item i {
+  font-size: 16px;
+  color: #22c55e; /* trust green */
+}
+
+/* Slight glow on hover (optional) */
+.security-item:hover {
+  color: #e5e7eb;
+}
 
   </style>
   <link rel="stylesheet" href="theme.css">
 </head>
 <body>
+<div id="blockedOverlay" style="
+  position:fixed;
+  inset:0;
+  background:#050505;
+  display:none;
+  z-index:99999;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  flex-direction:column;
+">
+  <span class="material-icons" style="font-size:5rem;color:#ef4444;">
+    block
+  </span>
+  <h1 style="margin-top:20px;
+             font-family:Poppins;
+             font-size:2rem;
+             background:linear-gradient(135deg,#ef4444,#b91c1c);
+             -webkit-background-clip:text;
+             -webkit-text-fill-color:transparent;">
+    You are Blocked
+  </h1>
+  <p style="color:#aaa;margin-top:10px;">
+    You are Blocked from <b>BOOKStore</b><br>
+    by <b>Bhavesh (Admin)</b>
+  </p>
+</div>
 
   <!-- HEADER -->
   <header>
-    <a href="index.html">
-      <img src="logo.png" alt="BOOKStore" id="logo" onerror="this.style.display='none'; document.write('<span style=\'font-weight:bold;font-size:1.5rem;color:white;\'>BOOKStore</span>')">
-    </a>
+    <img src="logo.png" alt="BOOKStore" id="logo" onerror="this.style.display='none'; document.write('<span style=\'font-weight:bold;font-size:1.5rem;\'>BOOKStore</span>')">
     
     <div class="hamburger" id="hamburger">
       <span></span>
@@ -504,7 +1033,7 @@ h1 {
   </header>
 
   <!-- SIDE MENU -->
-<nav class="menu" id="menu">
+ <nav class="menu" id="menu">
 
   <a href="index.html" class="active">
     <i class="ph ph-house"></i> Home
@@ -525,40 +1054,141 @@ h1 {
   <a href="link.html">
     <i class="ph ph-link"></i> Link Processor
   </a>
-
   <a href="profile.html">
     <i class="ph ph-user"></i> Profile
   </a>
 
 </nav>
 
+
   <!-- SEARCH -->
   <div id="searchBar">
     <input type="text" id="searchInput" placeholder="Search by Title, Author, or Year..." onkeyup="searchBooks()">
   </div>
 
-  <h1>NIDAR SERIES</h1>
-<div class="subtitle">Fearless preparation • Maximum impact • Board dominance</div>
+  <!-- GREETING & ADMIN -->
+  <div id="greeting"></div>
+  <button id="adminBtn" onclick="window.open('admin.html','_blank')">Admin Panel</button>
 
+  <!-- BANNER CAROUSEL -->
+  <div class="banner-container" id="bannerContainer">
+    <div class="banner-slide" id="bannerSlide">
+      <div class="banner-item">
+  <a href="#">
+    <picture>
+      <source srcset="nidarmobile.png" media="(max-width: 600px)">
+      <img src="nidarpc.png" alt="Unbarbad">
+    </picture>
+  </a>
+</div>
+
+<div class="banner-item">
+  <a href="edupie.html">
+    <picture>
+      <source srcset="edupiemobile.png" media="(max-width: 600px)">
+      <img src="edupiepc.png" alt="EduPie">
+    </picture>
+  </a>
+</div>
+
+    </div>
+  </div>
+  <div class="dots">
+    <span class="dot active" onclick="setSlide(0)"></span>
+    <span class="dot" onclick="setSlide(1)"></span>
+  </div>
 
   <!-- BOOKS GRID -->
   <div class="books">
-    <!-- Mathematics -->
-    <div class="book">
-      <img src="maths.png" onerror="this.src='https://via.placeholder.com/200x300?text=Math'">
-      <div class="book-content">
-        <h3>Mathematics</h3>
-        <div class="book-meta">Year: 2026</div>
-        <div class="book-meta">Author: Bhavesh</div>
-        <div class="price"><span>Free</span></div>
-        <button class="preview-btn" onclick="previewPDF('mathematics.pdf')">Preview</button>
-      </div>
+       <div class="book">
+      <img src="https://imgv2-1-f.scribdassets.com/img/document/705001627/298x396/0d8239f381/1767511592?v=1" onerror="this.src='https://via.placeholder.com/200x300?text=No+Image'">
+      <h3>Most Important Questions - Maths</h3>
+      <div class="book-meta">Class X • 2025-26</div>
+      <div class="book-meta">BOOKStore</div>
+      <div class="price"><span>Free</span></div>
+      <button class="preview-btn" onclick="previewPDF('https://drive.google.com/file/d/1kPOkCJGBRXbRZ7EredBctGA3g9JJe_Xm/preview')">Preview</button>
     </div>
+        <div class="book">
+      <img src="https://imgv2-2-f.scribdassets.com/img/document/782879876/original/b359ee8337/1?v=1" onerror="this.src='https://via.placeholder.com/200x300?text=No+Image'">
+      <h3>Most Important Topics - Social Science</h3>
+      <div class="book-meta">Class X • 2025-26</div>
+      <div class="book-meta">BOOKStore</div>
+      <div class="price"><span>Free</span></div>
+      <button class="preview-btn" onclick="previewPDF('https://drive.google.com/file/d/1E4qE8rWI8jN_FK64dlzUwHzUut_jyLoW/preview')">Preview</button>
+    </div>
+        <div class="book">
+      <img src="https://imgv2-1-f.scribdassets.com/img/document/781744347/original/2a1c51cb84/1?v=1" onerror="this.src='https://via.placeholder.com/200x300?text=No+Image'">
+      <h3>Most Important Topics - Science</h3>
+      <div class="book-meta">Class X • 2025-26</div>
+      <div class="book-meta">BOOKStore</div>
+      <div class="price"><span>Free</span></div>
+      <button class="preview-btn" onclick="previewPDF('https://drive.google.com/file/d/1E4qE8rWI8jN_FK64dlzUwHzUut_jyLoW/preview')">Preview</button>
+    </div>
+
+    <div class="book">
+      <img src="booklet.png" onerror="this.src='https://via.placeholder.com/200x300?text=No+Image'">
+      <h3>Brahmastra Booklet</h3>
+      <div class="book-meta">Class X • 2025-26</div>
+      <div class="book-meta">Next Toppers</div>
+      <div class="price"><span>Free</span></div>
+      <button class="preview-btn" onclick="previewPDF('https://drive.google.com/file/d/1uxeKiDwiw3GDAkPTyDOe5uJ3ZLuOELOw/preview')">Preview</button>
+    </div>
+
+    <div class="book">
+      <img src="RD.jpg" onerror="this.src='https://via.placeholder.com/200x300?text=No+Image'">
+      <h3>RD Sharma</h3>
+      <div class="book-meta">Class X • 2023-24</div>
+      <div class="book-meta">RD Sharma</div>
+      <div class="price"><span>Free</span></div>
+      <button class="preview-btn" onclick="previewPDF('https://drive.google.com/file/d/1sKoawaJf2PUk8dWSFvrcoGjC_0V0k8GS/preview')">Preview</button>
+    </div>
+
+    <div class="book">
+      <img src="https://m.media-amazon.com/images/I/81PXZDHS-KL._UF350,350_QL50_.jpg" onerror="this.src='https://via.placeholder.com/200x300?text=No+Image'">
+      <h3>Unbarbaad</h3>
+      <div class="book-meta">Class X</div>
+      <div class="book-meta">Shobit Nirwan</div>
+      <div class="price"><span>Free</span></div>
+      <button class="preview-btn" onclick="previewPDF('https://drive.google.com/file/d/1KVuKBojVZLSi-dnjfVM1BkOp93w_1o4l/preview')">Preview</button>
+    </div>
+  </div>
+<h2 class="section-title">Browse Series</h2>
+
+<div class="batch-grid">
+  <!-- Abhay Batch -->
+  <div class="batch-card">
+    <img src="nidar.png" alt="Nidar Series">
+    <span class="batch-tag">By Bhavesh</span>
+    <h3>Nidar Series</h3>
+    <button class="explore-btn" id="nidarExploreBtn">
+  Explore
+</button>
+
+  </div>
+
+</div>
+
+  <!-- COLLECTIONS -->
+  <h2 class="section-title">Browse Publishers</h2>
+  <div class="folders hide-during-preview">
+    <!-- Oswaal -->
+    <a href="oswaal.html" class="collection-box">
+      <img src="oswaal.png" class="collection-img" alt="Oswaal">
+      <div class="collection-title">Oswaal Books</div>
+      <div class="collection-desc">Sample Papers & Question Banks</div>
+    </a>
+    
+    <!-- CBSE -->
+    <a href="cbse.html" class="collection-box">
+      <img src="https://upload.wikimedia.org/wikipedia/en/thumb/9/95/CBSE_new_logo.svg/512px-CBSE_new_logo.svg.png"" class="collection-img" alt="CBSE" onerror="this.src='https://via.placeholder.com/100?text=CBSE'">
+      <div class="collection-title">CBSE Official</div>
+      <div class="collection-desc">Syllabus & PYQs</div>
+    </a>
   </div>
 
   <!-- SOCIAL LINKS -->
   <div class="social-buttons hide-during-preview">
-     <a href="https://www.youtube.com/@bookstoreofficial"
+    <a href="https://www.youtube.com/@bookstoreofficial"
      target="_blank"
      class="social-btn youtube"
      title="Subscribe on YouTube"
@@ -579,8 +1209,9 @@ h1 {
   </a>
 </div>
 
+
   <!-- FOOTER -->
-  <footer>
+  <footer class="hide-during-preview">
     <div class="madeby">Made by Bhavesh</div>
     <p style="color: #666; font-size: 0.85rem; margin-bottom: 10px;">© 2025 BOOKStore. All rights reserved.</p>
     <div>
@@ -589,46 +1220,109 @@ h1 {
     </div>
   </footer>
 
+  <!-- LOGIN POPUP -->
+  <div id="loginPopup">
+    <div id="loginBox">
+      <button id="closeLogin">&times;</button>
+      <h2>Login</h2>
+      
+      <div id="authErrorBox"></div>
+
+      <div class="input-group">
+        <input type="email" id="email" placeholder=" " required>
+        <label for="email">Email Address</label>
+      </div>
+
+      <div class="input-group">
+        <input type="password" id="password" placeholder=" " required>
+        <label for="password">Password</label>
+      </div>
+
+      <button id="emailLoginBtn" class="auth-btn">Login</button>
+      
+      <div style="margin: 15px 0; color: #555; font-size: 0.9rem;">OR</div>
+      
+      <button id="googleLoginBtn" class="auth-btn">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/2048px-Google_%22G%22_logo.svg.png" alt="G" width="20">
+        Continue with Google
+      </button>
+
+      <button id="createAccountBtn">or Create new account</button>
+      <!-- Security Info -->
+<div class="login-security">
+  <div class="security-item">
+    <i class="ph ph-shield-check"></i>
+    100% Secure Authentication
+  </div>
+  <div class="security-item">
+    <i class="ph ph-lock-key"></i>
+    End-to-End Encrypted
+  </div>
+  
+</div>
+
+    </div>
+  </div>
+
   <!-- PDF PREVIEW OVERLAY -->
   <div id="previewOverlay">
     <div id="previewHeader">
       <span>PDF Preview</span>
-      <div>
+      <div class="preview-actions">
         <button onclick="openFullscreen()">Fullscreen</button>
         <button class="close" onclick="closePreview()">Close</button>
       </div>
     </div>
-   <iframe id="pdfFrame"></iframe> </iframe>
-
+    <iframe id="pdfFrame" sandbox="allow-scripts allow-same-origin"></iframe>
   </div>
-<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
 
-<script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyCcpG-oEqkDprgTwWXKt5CFsttjAQAZFNg",
-    authDomain: "bookstore-6ab08.firebaseapp.com",
-    projectId: "bookstore-6ab08",
-  };
-
-  firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
-
-  auth.onAuthStateChanged(user => {
-    if (!user) {
-      window.location.replace("index.html");
-    }
-  });
-</script>
-
+  <!-- SCRIPTS -->
   <script>
-    
+    // --- 1. CONFIG ---
+    const firebaseConfig = {
+      apiKey: "AIzaSyCcpG-oEqkDprgTwWXKt5CFsttjAQAZFNg",
+      authDomain: "bookstore-6ab08.firebaseapp.com",
+      projectId: "bookstore-6ab08",
+      storageBucket: "bookstore-6ab08.firebasestorage.app",
+      messagingSenderId: "102226032749",
+      appId: "1:102226032749:web:f7090175d2e53c2f522764",
+      measurementId: "G-R9N7YSCMY0"
+    };
+
+    const app = firebase.initializeApp(firebaseConfig);
+    const auth = app.auth();
+    const ADMIN_UID = "F9UxJ3W6CVUVIIgwByuHQxscQab2";
+
+    // --- 2. UI ELEMENTS ---
+    const loginPopup = document.getElementById("loginPopup");
+    const closeLogin = document.getElementById("closeLogin");
+    const greeting = document.getElementById("greeting");
+    const adminBtn = document.getElementById("adminBtn");
     const previewOverlay = document.getElementById("previewOverlay");
     const pdfFrame = document.getElementById("pdfFrame");
+    
+    // Auth Elements
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    const emailLoginBtn = document.getElementById("emailLoginBtn");
+    const googleLoginBtn = document.getElementById("googleLoginBtn");
+    const createAccountBtn = document.getElementById("createAccountBtn");
+    const errorBox = document.getElementById('authErrorBox');
+
+    let isCreatingAccount = false;
+
+    // --- 3. EVENT LISTENERS ---
+closeLogin.onclick = () => {
+  loginPopup.classList.remove("show");
+};
+
+   
+
+    // Hamburger Menu
     const hamburger = document.getElementById("hamburger");
     const menu = document.getElementById("menu");
 
-    // --- MENU LOGIC ---
     hamburger.addEventListener("click", (e) => {
       e.stopPropagation();
       hamburger.classList.toggle("active");
@@ -642,42 +1336,224 @@ h1 {
       }
     });
 
-    // --- PDF PREVIEW ---
-    function previewPDF(url) {
-  if (!url) return;
+    // --- 4. AUTH LOGIC ---
+    
+    // Toggle Login/Signup Mode
+    function toggleMode(isCreate) {
+      isCreatingAccount = isCreate;
+      emailInput.value = '';
+      passwordInput.value = '';
+      errorBox.style.display = 'none';
+      
+      const title = document.querySelector('#loginBox h2');
+      title.textContent = isCreate ? "Create Account" : "Login";
+      emailLoginBtn.textContent = isCreate ? "Sign Up" : "Login";
+      
+      createAccountBtn.innerHTML = isCreate 
+        ? 'or <span style="color:var(--accent-color)">Back to Login</span>' 
+        : 'or <span style="color:var(--accent-color)">Create new account</span>';
+    }
 
-  // Enable toolbar, page controls, zoom
-  pdfFrame.src = url + "#toolbar=1&navpanes=0&scrollbar=1";
+    createAccountBtn.onclick = () => toggleMode(!isCreatingAccount);
 
-  previewOverlay.style.display = "flex";
-  document.body.style.overflow = "hidden";
+    function displayError(msg) {
+      errorBox.textContent = msg;
+      errorBox.style.display = 'block';
+    }
+
+    // Auth State Listener
+  auth.onAuthStateChanged((user) => {
+  updateNidarButton(user);
+
+  if (user) {
+    // ✅ Logged in
+    initUser(user);
+
+    loginPopup.classList.remove("show");
+    toggleMode(false); // reset to login mode
+  } else {
+    // ❌ Not logged in
+    initUser(null);
+
+    // 🔑 FORCE SHOW LOGIN POPUP
+    loginPopup.classList.add("show");
+    toggleMode(false);
+  }
+});
+
+
+const nidarExploreBtn = document.getElementById("nidarExploreBtn");
+
+  function updateNidarButton(user) {
+    if (!nidarExploreBtn) return;
+
+    if (user) {
+      // ✅ Logged in
+      nidarExploreBtn.textContent = "Explore";
+      nidarExploreBtn.onclick = () => {
+        window.open("nidar.html", "_blank");
+      };
+    } else {
+      // ❌ Not logged in
+      nidarExploreBtn.textContent = "Login to View";
+      nidarExploreBtn.onclick = () => {
+        loginPopup.style.display = "flex";
+        setTimeout(() => loginPopup.classList.add("show"), 10);
+      };
+    }
+  }
+
+    // Email Login/Signup
+    emailLoginBtn.onclick = async () => {
+      const email = emailInput.value.trim();
+      const password = passwordInput.value;
+      if (!email || !password) return displayError("Please enter email and password.");
+
+      try {
+        if (isCreatingAccount) {
+          await auth.createUserWithEmailAndPassword(email, password);
+        } else {
+          await auth.signInWithEmailAndPassword(email, password);
+        }
+      } catch (error) {
+        displayError(error.message);
+      }
+    };
+
+    // Google Login
+    googleLoginBtn.onclick = async () => {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      try {
+        await auth.signInWithPopup(provider);
+      } catch (error) {
+        displayError(error.message);
+      }
+    };
+auth.onAuthStateChanged(user => {
+  if (!user) return;
+
+  const userRef = firebase.database().ref('users/' + user.uid);
+
+  userRef.once('value').then(snapshot => {
+    if (!snapshot.exists()) {
+      userRef.set({
+        displayName: user.displayName || "",
+        email: user.email || "",
+        vip: false,
+        createdAt: Date.now()
+      });
+    }
+  });
+  firebase.database()
+  .ref('users/' + user.uid + '/blocked')
+  .once('value')
+  .then(snapshot => {
+    if (snapshot.val() === true) {
+      document.body.style.overflow = "hidden";
+      document.getElementById("blockedOverlay").style.display = "flex";
+    }
+  });
+
+});
+
+    // --- 5. USER DISPLAY LOGIC ---
+    function initUser(user) {
+  adminBtn.style.display = "none";
+  greeting.innerHTML = "";
+
+  if (!user) return;
+
+  const isAdmin = user.uid === ADMIN_UID;
+
+  // Read data from database
+  firebase.database()
+    .ref("users/" + user.uid)
+    .once("value")
+    .then(snapshot => {
+      const data = snapshot.val() || {};
+      const name = data.displayName || user.email.split("@")[0];
+      const isVIP = data.vip === true;
+
+      let tag = "";
+
+      if (isVIP) {
+        tag = ` <span class="vip">(VIP)</span>`;
+      }
+
+      if (isAdmin) {
+        tag = ` <span class="Admin">(Admin)</span>
+          <i class="material-icons"
+             style="font-size:16px;color:#3b82f6;vertical-align:middle;">
+             verified
+          </i>`;
+        adminBtn.style.display = "block";
+      }
+
+      greeting.innerHTML =
+        `Welcome back, <span id="userNameDisplay">${name}</span>${tag}`;
+    });
 }
 
 
-    function closePreview() {
-      previewOverlay.style.display = "none";
-      pdfFrame.src = "";
-      document.body.style.overflow = "auto";
+    // --- 6. CAROUSEL LOGIC ---
+    let slideIndex = 0;
+    const slides = document.getElementById("bannerSlide");
+    const dots = document.querySelectorAll(".dot");
+    const totalSlides = 2; // Fixed based on HTML
+
+    function setSlide(n) {
+      slideIndex = n;
+      slides.style.transform = `translateX(-${slideIndex * 100}%)`;
+      dots.forEach((d, i) => d.classList.toggle("active", i === slideIndex));
     }
 
-    function openFullscreen() {
-      if (pdfFrame.requestFullscreen) pdfFrame.requestFullscreen();
-    }
+    // Auto play
+    setInterval(() => {
+      slideIndex = (slideIndex + 1) % totalSlides;
+      setSlide(slideIndex);
+    }, 5000);
 
-    // --- SEARCH ---
+    // --- 7. UTILS & PDF ---
     function searchBooks() {
       let input = document.getElementById('searchInput').value.toLowerCase();
       let books = document.querySelectorAll('.book');
-      
       books.forEach(book => {
         let text = book.innerText.toLowerCase();
         book.style.display = text.includes(input) ? "flex" : "none";
       });
     }
 
-    
+    function previewPDF(url) {
+      pdfFrame.src = url + "#toolbar=0&navpanes=0&scrollbar=0";
+      previewOverlay.style.display = "flex";
+      // Hide scroll on body
+      document.body.style.overflow = "hidden";
+      document.querySelectorAll(".hide-during-preview").forEach(el => el.style.opacity = "0");
+    }
+
+    function closePreview() {
+      previewOverlay.style.display = "none";
+      pdfFrame.src = "";
+      document.body.style.overflow = "auto";
+      document.querySelectorAll(".hide-during-preview").forEach(el => el.style.opacity = "1");
+    }
+
+    function openFullscreen() {
+      if (pdfFrame.requestFullscreen) pdfFrame.requestFullscreen();
+    }
+
+    // Security
+    document.addEventListener("contextmenu", e => e.preventDefault());
+    document.addEventListener("keydown", e => {
+       if((e.ctrlKey && (e.key === 'p' || e.key === 's' || e.key === 'u')) || e.key === 'PrintScreen') {
+         e.preventDefault();
+         alert("Protected Content");
+       }
+    });
+
   </script>
   <script src="theme.js"></script>
 
 </body>
+
 </html>
