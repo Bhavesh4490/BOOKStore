@@ -174,16 +174,8 @@
     .menu-icon, .menu-logo { width: 20px; height: 20px; object-fit: contain; opacity: 0.8; }
     .menu a:hover .menu-icon { opacity: 1; }
 
-    
-.menu i {
-  font-size: 20px;
-  opacity: 0.85;
-}
-
-.menu a:hover i {
-  opacity: 1;
-}
     /* --- 3. SEARCH BAR --- */
+    /* --- SEARCH BAR (THEME AWARE / GLASS) --- */
 #searchBar {
   padding: 22px 5%;
   display: flex;
@@ -356,7 +348,7 @@
     }
 
     /* --- 6. BOOK CARDS --- */
-.books {
+    .books {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
       gap: 25px;
@@ -366,27 +358,31 @@
     }
 
     .book {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-md);
-      padding: 15px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      position: relative;
-      overflow: hidden;
-    }
+  background: rgba(18, 18, 18, 0.6);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 15px;
+  transition: all 0.35s ease;
+}
 
-    .book:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 15px 30px rgba(0,0,0,0.4);
-      border-color: rgba(255,255,255,0.2);
-    }
+
+   .book:hover {
+  transform: translateY(-6px);
+  border-color: color-mix(in srgb, var(--accent-color) 45%, transparent);
+  box-shadow: 0 0 35px color-mix(
+    in srgb,
+    var(--accent-color) 25%,
+    transparent
+  );
+}
+
+
 
     .book img {
       width: 100%;
-      height: 220px;
+      height: 280px;
       object-fit: cover;
       border-radius: 8px;
       margin-bottom: 15px;
@@ -395,15 +391,6 @@
 
     .book:hover img { transform: scale(1.05); }
 
-    /* Wrapper for text content */
-    .book-content {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      flex: 1;
-    }
-
     .book h3 {
       font-family: var(--font-head);
       font-size: 1rem;
@@ -411,7 +398,6 @@
       margin-bottom: 5px;
       text-align: center;
       line-height: 1.4;
-      color: var(--text-main);
     }
 
     .book-meta {
@@ -420,7 +406,8 @@
       margin-bottom: 4px;
       text-align: center;
     }
-        .price {
+
+    .price {
   margin: 10px 0;
   font-weight: 600;
   font-size: 0.95rem;
@@ -696,21 +683,18 @@
       gap: 10px;
       padding: 12px 24px;
       border-radius: var(--radius-pill);
-      background: rgba(255,255,255,0.03);
+      background: #1f1f22;
       color: white;
       text-decoration: none;
       font-weight: 500;
-      transition: all 0.3s ease;
-      border: 1px solid var(--border-color); 
-      backdrop-filter: blur(16px);
-  
+      transition: 0.3s;
+      border: 1px solid transparent;
     }
 
     .social-btn:hover {
-     transform: translateY(-2px);
-     background: rgba(59,130,246,0.12);
-     border-color: rgba(59,130,246,0.45);
-     box-shadow: 0 0 18px rgba(59,130,246,0.25);
+      background: #27272a;
+      border-color: rgba(255,255,255,0.1);
+      transform: translateY(-2px);
     }
     
     .social-btn.insta:hover { color: #e1306c; border-color: #e1306c; }
@@ -761,11 +745,11 @@
     
     /* Force Grid on mobile as per user preference in code, but refined */
     @media (max-width: 480px) {
-      .books { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-     .book { flex-direction: column; text-align: center; }
-     .book img { width: 100%; height: 160px; margin-right: 0; }
-     .book > div { align-items: center; }
-      .preview-btn { width: 100%; }
+       .books { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+       .book { flex-direction: column; text-align: center; }
+       .book img { width: 100%; height: 160px; margin-right: 0; }
+       .book > div { align-items: center; }
+       .preview-btn { width: 100%; }
     }
 /* Publishers vertical only on mobile */
 @media (max-width: 600px) {
@@ -791,39 +775,161 @@
   box-shadow: none;
 }
 
- .collection-box:hover {
-   background: color-mix(
-   in srgb,
-   var(--accent-color) 8%,
-   transparent
+.collection-box:hover {
+  background: color-mix(
+    in srgb,
+    var(--accent-color) 8%,
+    transparent
   );
-   border-color: color-mix(
-   in srgb,
-   var(--accent-color) 40%,
-   transparent
+  border-color: color-mix(
+    in srgb,
+    var(--accent-color) 40%,
+    transparent
   );
   transform: translateY(-4px);
 
   /* subtle premium glow (NO blue lock) */
-   box-shadow:
-   0 10px 28px rgba(0,0,0,0.45),
-   0 0 18px color-mix(
-   in srgb,
-   var(--accent-color) 18%,
-   transparent
-  );
+  box-shadow:
+    0 10px 28px rgba(0,0,0,0.45),
+    0 0 18px color-mix(
+      in srgb,
+      var(--accent-color) 18%,
+      transparent
+    );
 }
 
   .collection-img {
-   height: 45px;
-   margin-bottom: 0;
+    height: 45px;
+    margin-bottom: 0;
   }
 }
-  .social-logo {
-   width: 22px;
-   height: 22px;
-   object-fit: contain;
+.social-logo {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+}
+/* ===== Browse Series ===== */
+.batch-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 25px;
+  padding: 0 5%;
+  max-width: 1200px;
+  margin: 0 auto 50px;
+}
+
+.batch-card {
+  background: rgba(18, 18, 18, 0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-color);
+  border-radius: 22px;
+  padding: 22px;
+  transition: all 0.35s ease;
+    box-shadow: none;
+}
+.batch-card:hover {
+  transform: translateY(-6px);
+  border-color: color-mix(in srgb, var(--accent-color) 45%, transparent);
+
+  /* force theme-based shadow */
+  box-shadow:
+    0 18px 45px color-mix(
+      in srgb,
+      var(--accent-color) 28%,
+      transparent
+    ) !important;
+}
+.batch-card:hover {
+  transform: translateY(-6px);
+  border-color: color-mix(in srgb, var(--accent-color) 45%, transparent);
+  box-shadow:
+    0 12px 30px rgba(0,0,0,0.55),
+    0 0 22px color-mix(
+      in srgb,
+      var(--accent-color) 22%,
+      transparent
+    ) !important;
+}
+
+
+
+
+.batch-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 15px;
+}
+
+.batch-card h3 {
+  font-family: var(--font-head);
+  font-size: 1.1rem;
+  margin-bottom: 15px;
+}
+
+/* Tag */
+.batch-tag {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: color-mix(in srgb, var(--accent-color) 15%, transparent);
+  color: var(--accent-color);
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  backdrop-filter: blur(6px);
+  border: 1px solid color-mix(in srgb, var(--accent-color) 35%, transparent);
+}
+
+
+/* Explore Button */
+.explore-btn {
+  width: 100%;
+  padding: 12px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: white;
+  background: var(--primary-gradient);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.explore-btn:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0 26px color-mix(
+    in srgb,
+    var(--accent-color) 45%,
+    transparent
+  );
+}
+
+
+.explore-btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, transparent, rgba(255,255,255,0.35), transparent);
+  transform: translateX(-100%);
+  transition: 0.6s;
+}
+
+.explore-btn:hover::after {
+  transform: translateX(100%);
+}
+
+/* Force batch order on mobile */
+@media (max-width: 600px) {
+  .batch-grid {
+    grid-template-columns: 1fr; /* single column */
   }
+}
 
 .social-btn.youtube:hover {
   color: #ff0000;
@@ -831,14 +937,35 @@
   box-shadow: 0 0 14px rgba(255, 0, 0, 0.35);
 }
 
+.menu i {
+  font-size: 20px;
+  opacity: 0.85;
+}
+
+.menu a:hover i {
+  opacity: 1;
+}
+.social-btn {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border-color);
+  backdrop-filter: blur(16px);
+  transition: all 0.3s ease;
+}
+.social-btn:hover {
+  background: rgba(59,130,246,0.12);
+  border-color: rgba(59,130,246,0.45);
+  box-shadow: 0 0 18px rgba(59,130,246,0.25);
+}
 /* ===== Login Security Info ===== */
 .login-security {
   margin-top: 18px;
   padding-top: 14px;
   border-top: 1px solid rgba(255,255,255,0.08);
+
   display: flex;
   flex-direction: column;
   gap: 8px;
+
   font-size: 0.8rem;
   color: var(--text-muted);
 }
@@ -848,6 +975,7 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
+
   opacity: 0.9;
 }
 
@@ -859,192 +987,6 @@
 /* Slight glow on hover (optional) */
 .security-item:hover {
   color: #e5e7eb;
-}
-/* ===== NIDAR SERIES IMAGE FIX ===== */
-#nidarSeriesBox .collection-img {
-  height: 110px;          /* Bigger logo */
-  width: auto;
-  max-width: 100%;
-  object-fit: contain;
-  filter: none;           /* Remove dull effect */
-}
-
-/* Mobile optimization */
-@media (max-width: 600px) {
-  #nidarSeriesBox .collection-img {
-    height: 90px;
-  }
-}
-#nidarSeriesBox {
-  border: 1px solid color-mix(in srgb, var(--accent-color) 45%, transparent);
-  box-shadow:
-    0 12px 30px rgba(0,0,0,0.6),
-    0 0 30px color-mix(in srgb, var(--accent-color) 20%, transparent);
-}
-
-#nidarSeriesBox:hover .collection-img {
-  transform: scale(1.12);
-}
-/* ===== NIDAR IMAGE FULL-WIDTH (1cm GAP) ===== */
-#nidarSeriesBox {
-  padding: 20px; /* keeps inner spacing clean */
-}
-
-#nidarSeriesBox .collection-img {
-  width: calc(100% - 2cm); /* 1cm gap on left + right */
-  height: auto;
-  max-height: 140px;       /* prevents it from getting TOO tall */
-  object-fit: contain;
-  margin: 0 auto 15px;     /* center + bottom gap */
-  display: block;
-  filter: none;
-}
-
-/* Mobile refinement */
-@media (max-width: 600px) {
-  #nidarSeriesBox .collection-img {
-    width: calc(100% - 1.6cm); /* slightly tighter on mobile */
-    max-height: 120px;
-  }
-}
-/* ===== NIDAR SERIES – HERO PREMIUM CARD ===== */
-#nidarSeriesBox {
-  position: relative;
-  overflow: hidden;
-  background:
-    radial-gradient(
-      circle at top left,
-      rgba(139, 92, 246, 0.15),
-      transparent 60%
-    ),
-    linear-gradient(180deg, rgba(18,18,18,0.95), rgba(10,10,10,0.95));
-  
-  border-radius: 22px;
-  border: 1px solid rgba(139, 92, 246, 0.45);
-  box-shadow:
-    0 20px 50px rgba(0,0,0,0.7),
-    0 0 40px rgba(139, 92, 246, 0.25);
-
-  transition: all 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-
-/* glowing border animation */
-#nidarSeriesBox::before {
-  content: "";
-  position: absolute;
-  inset: -1px;
-  border-radius: inherit;
-  background: linear-gradient(
-    120deg,
-    transparent,
-    rgba(139, 92, 246, 0.6),
-    rgba(59, 130, 246, 0.6),
-    transparent
-  );
-  opacity: 0;
-  transition: opacity 0.4s ease;
-  pointer-events: none;
-}
-
-#nidarSeriesBox:hover::before {
-  opacity: 1;
-}
-
-/* hover lift */
-#nidarSeriesBox:hover {
-  transform: translateY(-10px) scale(1.02);
-  box-shadow:
-    0 30px 70px rgba(0,0,0,0.85),
-    0 0 55px rgba(139, 92, 246, 0.35);
-}
-
-/* ===== IMAGE (CINEMATIC) ===== */
-#nidarSeriesBox .collection-img {
-  width: 100%;
-  max-height: 150px;
-  object-fit: contain;
-  margin-bottom: 18px;
-  transform: scale(1);
-  transition: transform 0.45s ease, filter 0.45s ease;
-  filter: drop-shadow(0 10px 25px rgba(0,0,0,0.6));
-}
-
-#nidarSeriesBox:hover .collection-img {
-  transform: scale(1.12);
-}
-
-/* ===== TITLE ===== */
-#nidarSeriesBox .collection-title {
-  font-size: 1.4rem;
-  font-family: var(--font-head);
-  font-weight: 700;
-  margin-bottom: 6px;
-  background: linear-gradient(90deg, #facc15, #f59e0b);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  letter-spacing: 0.5px;
-}
-
-/* ===== DESCRIPTION ===== */
-#nidarSeriesBox .collection-desc {
-  font-size: 0.9rem;
-  color: #d4d4d8;
-  margin-bottom: 18px;
-  line-height: 1.4;
-}
-
-/* ===== EXPLORE BUTTON (BOSS LEVEL) ===== */
-#nidarExploreBtn {
-  background: linear-gradient(135deg, #facc15, #f59e0b);
-  color: #000;
-  font-weight: 800;
-  letter-spacing: 0.6px;
-  border: none;
-  border-radius: 999px;
-  padding: 14px 0;
-  font-size: 0.95rem;
-  position: relative;
-  overflow: hidden;
-  box-shadow:
-    0 10px 25px rgba(250, 204, 21, 0.45);
-  transition: all 0.3s ease;
-}
-
-#nidarExploreBtn::after {
-  content: "";
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: rgba(255,255,255,0.35);
-  transform: rotate(25deg) translate(-120%, -120%);
-  transition: transform 0.6s ease;
-}
-
-#nidarExploreBtn:hover::after {
-  transform: rotate(25deg) translate(120%, 120%);
-}
-
-#nidarExploreBtn:hover {
-  transform: translateY(-2px);
-  box-shadow:
-    0 15px 40px rgba(250, 204, 21, 0.7);
-}
-
-/* ===== MOBILE POLISH ===== */
-@media (max-width: 600px) {
-  #nidarSeriesBox {
-    padding: 20px;
-  }
-
-  #nidarSeriesBox .collection-img {
-    max-height: 120px;
-  }
-
-  #nidarSeriesBox .collection-title {
-    font-size: 1.25rem;
-  }
 }
 
   </style>
@@ -1210,27 +1152,20 @@
       <button class="preview-btn" onclick="previewPDF('https://drive.google.com/file/d/1KVuKBojVZLSi-dnjfVM1BkOp93w_1o4l/preview')">Preview</button>
     </div>
   </div>
+<h2 class="section-title">Browse Batches</h2>
 
-<!-- BROWSE SERIES -->
-<h2 class="section-title">Browse Series</h2>
+<div class="batch-grid">
+  <!-- Abhay Batch -->
+  <div class="batch-card">
+    <img src="nidar.png" alt="Nidar Series">
+    <span class="batch-tag">By Bhavesh</span>
+    <h3>Nidar Series</h3>
+    <button class="explore-btn" id="nidarExploreBtn">
+  Explore
+</button>
 
-<div class="folders hide-during-preview">
-  <div class="collection-box" id="nidarSeriesBox">
-    <img src="nidar.png" class="collection-img" alt="Nidar Series"
-         onerror="this.src='https://via.placeholder.com/100?text=NIDAR'">
-
-    <div class="collection-title">Nidar Series</div>
-    <div class="collection-desc">
-      Board-focused premium series for fearless toppers
-    </div>
-
-    <button
-      class="preview-btn"
-      id="nidarExploreBtn"
-      style="margin-top:15px; width:100%;">
-      Explore
-    </button>
   </div>
+
 </div>
 
   <!-- COLLECTIONS -->
@@ -1378,10 +1313,10 @@
     let isCreatingAccount = false;
 
     // --- 3. EVENT LISTENERS ---
-    // Close Login Modal
-     closeLogin.onclick = () => {
-     loginPopup.classList.remove("show");
-      setTimeout(() => loginPopup.style.display = "none", 300); };
+closeLogin.onclick = () => {
+  loginPopup.classList.remove("show");
+};
+
    
 
     // Hamburger Menu
@@ -1427,20 +1362,46 @@
     }
 
     // Auth State Listener
-    auth.onAuthStateChanged((user) => {
-      if (user) {
-        initUser(user);
-        // Hide login popup with animation
-        loginPopup.classList.remove("show");
-        setTimeout(() => loginPopup.style.display = "none", 300);
-        toggleMode(false);
-      } else {
-        initUser(null);
+  auth.onAuthStateChanged((user) => {
+  updateNidarButton(user);
+
+  if (user) {
+    // ✅ Logged in
+    initUser(user);
+
+    loginPopup.classList.remove("show");
+    toggleMode(false); // reset to login mode
+  } else {
+    // ❌ Not logged in
+    initUser(null);
+
+    // 🔑 FORCE SHOW LOGIN POPUP
+    loginPopup.classList.add("show");
+    toggleMode(false);
+  }
+});
+
+
+const nidarExploreBtn = document.getElementById("nidarExploreBtn");
+
+  function updateNidarButton(user) {
+    if (!nidarExploreBtn) return;
+
+    if (user) {
+      // ✅ Logged in
+      nidarExploreBtn.textContent = "Explore";
+      nidarExploreBtn.onclick = () => {
+        window.open("nidar.html", "_blank");
+      };
+    } else {
+      // ❌ Not logged in
+      nidarExploreBtn.textContent = "Login to View";
+      nidarExploreBtn.onclick = () => {
         loginPopup.style.display = "flex";
-        // Small delay to allow display flex to apply before opacity transition
         setTimeout(() => loginPopup.classList.add("show"), 10);
-      }
-    });
+      };
+    }
+  }
 
     // Email Login/Signup
     emailLoginBtn.onclick = async () => {
@@ -1494,26 +1455,6 @@ auth.onAuthStateChanged(user => {
   });
 
 });
-  const nidarBtn = document.getElementById("nidarExploreBtn");
-
-  function updateNidarButton(user) {
-    if (user) {
-      nidarBtn.innerText = "Explore";
-      nidarBtn.onclick = () => {
-        window.location.href = "nidar.html";
-      };
-    } else {
-      nidarBtn.innerText = "Login to Explore";
-      nidarBtn.onclick = () => {
-        loginPopup.style.display = "flex";
-        setTimeout(() => loginPopup.classList.add("show"), 10);
-      };
-    }
-  }
-
-  auth.onAuthStateChanged(user => {
-    updateNidarButton(user);
-  });
 
     // --- 5. USER DISPLAY LOGIC ---
     function initUser(user) {
