@@ -598,7 +598,8 @@ h1 {
         <button class="close" onclick="closePreview()">Close</button>
       </div>
     </div>
-    <iframe id="pdfFrame" sandbox="allow-scripts allow-same-origin"></iframe>
+   <iframe id="pdfFrame"></iframe> </iframe>
+
   </div>
 <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
@@ -643,11 +644,15 @@ h1 {
 
     // --- PDF PREVIEW ---
     function previewPDF(url) {
-      if (!url) return;
-      pdfFrame.src = url + "#toolbar=0&navpanes=0&scrollbar=0";
-      previewOverlay.style.display = "flex";
-      document.body.style.overflow = "hidden";
-    }
+  if (!url) return;
+
+  // Enable toolbar, page controls, zoom
+  pdfFrame.src = url + "#toolbar=1&navpanes=0&scrollbar=1";
+
+  previewOverlay.style.display = "flex";
+  document.body.style.overflow = "hidden";
+}
+
 
     function closePreview() {
       previewOverlay.style.display = "none";
@@ -670,14 +675,7 @@ h1 {
       });
     }
 
-    // --- SECURITY ---
-    document.addEventListener("contextmenu", e => e.preventDefault());
-    document.addEventListener("keydown", e => {
-      if ((e.ctrlKey && ["s","u","p"].includes(e.key.toLowerCase())) || e.key === "PrintScreen") {
-        e.preventDefault();
-        alert("Protected Content");
-      }
-    });
+    
   </script>
   <script src="theme.js"></script>
 
