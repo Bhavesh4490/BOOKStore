@@ -460,6 +460,37 @@ background:
   font-size: 18px;
   color: #fff;
 }
+.history-rename {
+    position: absolute;
+    right: 36px; /* ⬅ sits left of delete */
+    top: 50%;
+    transform: translateY(-50%);
+    width: 18px;
+    height: 18px;
+    opacity: 0;
+    cursor: pointer;
+    transition: var(--transition);
+    color: #fff;
+}
+
+/* Hover reveal */
+.history-item:hover .history-rename {
+    opacity: 0.85;
+}
+
+.history-rename:hover {
+    opacity: 1;
+    transform: translateY(-50%) scale(1.15);
+    color: var(--accent);
+    filter: drop-shadow(0 0 8px var(--accent-glow));
+}
+
+/* Mobile always visible */
+@media (max-width: 768px) {
+    .history-rename {
+        opacity: 0.9;
+    }
+}
 
 </style>
 
@@ -1113,7 +1144,8 @@ function renderHistory() {
             </div>
             <small>Resume at ${formatTime(item.time)} • ${item.date}</small>
 
-           <i class="ph ph-trash history-remove" title="Remove from history"></i>
+           <i class="ph ph-pencil-simple history-rename" title="Rename"></i>
+<i class="ph ph-trash history-remove" title="Remove from history"></i>
 
         `;
 
@@ -1131,8 +1163,25 @@ function renderHistory() {
             e.stopPropagation(); // ❌ must not play video
             removeHistoryItem(item.url, div);
         });
+/* ✏️ Rename logic */
+div.querySelector(".history-rename").addEventListener("click", (e) => {
+    e.stopPropagation(); // ❌ don't play video
+
+    const newTitle = prompt("Rename video", item.title);
+    if (!newTitle || !newTitle.trim()) return;
+
+    let history = getHistory();
+    const idx = history.findIndex(h => h.url === item.url);
+
+    if (idx !== -1) {
+        history[idx].title = newTitle.trim();
+        saveHistory(history);
+        renderHistory(); // refresh UI
+    }
+});
 
         historyList.appendChild(div);
+        
     });
 }
 
