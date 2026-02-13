@@ -994,7 +994,26 @@ document.getElementById("playLinkBtn").onclick = () => {
     linkError.textContent = "Please enter input";
 };
 
-function isValidVideo(url) { return /\.(mp4|m3u8)(\?.*)?$/i.test(url); }
+function isValidVideo(url) {
+  try {
+    const u = new URL(url);
+
+    // Allow normal MP4 / HLS
+    if (/\.(mp4|m3u8)(\?.*)?$/i.test(u.pathname)) return true;
+
+    // Allow YouTube googlevideo MP4 streams
+    if (
+      u.hostname.includes("googlevideo.com") &&
+      u.searchParams.get("mime") === "video/mp4"
+    ) {
+      return true;
+    }
+
+    return false;
+  } catch {
+    return false;
+  }
+}
 
 function renderLibrary(codeName, videos) {
     document.querySelector("#libraryTitle small").textContent = codeName;
@@ -1172,21 +1191,35 @@ video.addEventListener("leavepictureinpicture", () => {
 });
 
 function loadVideo(url) {
-    if (!navigator.onLine) {
-        video.src = url; // served from cache
+    if (window.hls) {
+        window.hls.destroy();
+        window.hls = null;
+    }
+
+    // GoogleVideo MP4 → direct play
+    if (url.includes("googlevideo.com")) {
+        video.src = url;
+        video.load();
         return;
     }
 
+    // HLS (.m3u8)
     if (Hls.isSupported() && url.endsWith(".m3u8")) {
-        if (window.hls) window.hls.destroy();
-        const hls = new Hls();
+        const hls = new Hls({
+            enableWorker: true,
+            lowLatencyMode: true
+        });
         hls.loadSource(url);
         hls.attachMedia(video);
         window.hls = hls;
-    } else {
-        video.src = url;
+        return;
     }
+
+    // Normal MP4
+    video.src = url;
+    video.load();
 }
+
 
 </script>
 
