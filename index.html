@@ -989,6 +989,154 @@
   color: #e5e7eb;
 }
 
+/* Placeholder */
+.feedback-box input::placeholder,
+.feedback-box textarea::placeholder {
+  color: var(--text-muted);
+}
+
+/* Focus glow */
+.feedback-box input:focus,
+.feedback-box textarea:focus {
+  outline: none;
+  border-color: var(--accent-color);
+
+  background: rgba(255,255,255,0.06);
+
+  box-shadow:
+    0 0 0 4px color-mix(
+      in srgb,
+      var(--accent-color) 18%,
+      transparent
+    ),
+    0 0 22px color-mix(
+      in srgb,
+      var(--accent-color) 35%,
+      transparent
+    );
+}
+
+/* Button hover */
+.feedback-box button:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow:
+    0 0 28px color-mix(
+      in srgb,
+      var(--accent-color) 45%,
+      transparent
+    );
+}
+
+/* Button shine animation */
+.feedback-box button::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255,255,255,0.35),
+    transparent
+  );
+  transform: translateX(-100%);
+  transition: 0.6s;
+}
+
+.feedback-box button:hover::after {
+  transform: translateX(100%);
+}
+
+/* Status text */
+#fbStatus {
+  margin-top: 12px;
+  font-size: 0.85rem;
+  text-align: center;
+  color: #22c55e;
+  display: none;
+}
+
+/* ===== Footer Inline Feedback (No Box) ===== */
+
+footer h3 {
+  margin-bottom: 14px;
+  font-family: var(--font-head);
+  font-size: 1.25rem;
+  background: linear-gradient(90deg, var(--accent-color), #a78bfa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+footer #fbName,
+footer #fbMessage {
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto 12px;
+  display: block;
+
+  padding: 14px 16px;
+  font-size: 0.95rem;
+  font-family: var(--font-body);
+
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+
+  color: var(--text-main);
+  transition: all 0.3s ease;
+}
+
+footer #fbName::placeholder,
+footer #fbMessage::placeholder {
+  color: var(--text-muted);
+}
+
+footer #fbName:focus,
+footer #fbMessage:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  background: rgba(255,255,255,0.06);
+  box-shadow: 0 0 18px color-mix(
+    in srgb,
+    var(--accent-color) 30%,
+    transparent
+  );
+}
+
+footer #fbSubmit {
+  width: 100%;
+  max-width: 520px;
+  margin: 10px auto 0;
+  display: block;
+
+  padding: 14px;
+  border-radius: 999px;
+  border: none;
+
+  background: var(--primary-gradient);
+  color: white;
+
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+
+  transition: all 0.3s ease;
+}
+
+footer #fbSubmit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 26px color-mix(
+    in srgb,
+    var(--accent-color) 45%,
+    transparent
+  );
+}
+
+footer #fbStatus {
+  margin-top: 10px;
+  font-size: 0.85rem;
+  color: #22c55e;
+}
+
   </style>
   <link rel="stylesheet" href="theme.css">
 </head>
@@ -1024,8 +1172,7 @@
   <!-- HEADER -->
   <header>
     <img src="logo.png" alt="BOOKStore" id="logo" onerror="this.style.display='none'; document.write('<span style=\'font-weight:bold;font-size:1.5rem;\'>BOOKStore</span>')">
-    
-    <div class="hamburger" id="hamburger">
+        <div class="hamburger" id="hamburger">
       <span></span>
       <span></span>
       <span></span>
@@ -1212,6 +1359,14 @@
 
   <!-- FOOTER -->
   <footer class="hide-during-preview">
+    <!-- ===== Feedback Section ===== -->
+  <h3>Drop Your Feedback</h3>
+  <input type="text" id="fbName" placeholder="Your Name" required>
+<textarea id="fbMessage" rows="4" placeholder="Write your feedback..." required></textarea>
+  <button id="fbSubmit">Submit</button>
+  <p id="fbStatus"></p>
+
+
     <div class="madeby">Made by Bhavesh</div>
     <p style="color: #666; font-size: 0.85rem; margin-bottom: 10px;">© 2025 BOOKStore. All rights reserved.</p>
     <div>
@@ -1219,6 +1374,7 @@
       <a href="about.html">About Us</a>
     </div>
   </footer>
+
 
   <!-- LOGIN POPUP -->
   <div id="loginPopup">
@@ -1279,16 +1435,21 @@
 
   <!-- SCRIPTS -->
   <script>
-    // --- 1. CONFIG ---
+     // --- 1. CONFIG ---
     const firebaseConfig = {
-      apiKey: "AIzaSyCcpG-oEqkDprgTwWXKt5CFsttjAQAZFNg",
-      authDomain: "bookstore-6ab08.firebaseapp.com",
-      projectId: "bookstore-6ab08",
-      storageBucket: "bookstore-6ab08.firebasestorage.app",
-      messagingSenderId: "102226032749",
-      appId: "1:102226032749:web:f7090175d2e53c2f522764",
-      measurementId: "G-R9N7YSCMY0"
-    };
+    apiKey: "AIzaSyCcpG-oEqkDprgTwWXKt5CFsttjAQAZFNg",
+    authDomain: "bookstore-6ab08.firebaseapp.com",
+    databaseURL: "https://bookstore-6ab08-default-rtdb.firebaseio.com",
+    projectId: "bookstore-6ab08",
+    storageBucket: "bookstore-6ab08.firebasestorage.app",
+    messagingSenderId: "102226032749",
+    appId: "1:102226032749:web:f7090175d2e53c2f522764"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const database = firebase.database();
+
+   
 
     const app = firebase.initializeApp(firebaseConfig);
     const auth = app.auth();
@@ -1550,8 +1711,121 @@ auth.onAuthStateChanged(user => {
          alert("Protected Content");
        }
     });
+function getFormattedTime() {
+  const now = new Date();
+
+  const hh = String(now.getHours()).padStart(2, '0');
+  const mm = String(now.getMinutes()).padStart(2, '0');
+
+  const dd = String(now.getDate()).padStart(2, '0');
+  const MM = String(now.getMonth() + 1).padStart(2, '0');
+  const yy = String(now.getFullYear()).slice(-2);
+
+  return `${hh}:${mm} ${dd}/${MM}/${yy}`;
+}
+
+    // --- 8. FEEDBACK SYSTEM ---
+    const fbName = document.getElementById("fbName");
+    const fbMessage = document.getElementById("fbMessage");
+    const fbSubmit = document.getElementById("fbSubmit");
+    const fbStatus = document.getElementById("fbStatus");
+
+    fbSubmit.addEventListener("click", async (e) => {
+      e.preventDefault();
+
+      const name = fbName.value.trim();
+      const message = fbMessage.value.trim();
+
+      // Require both fields
+      if (!name || !message) {
+        fbStatus.style.display = "block";
+        fbStatus.style.color = "#ef4444";
+        fbStatus.textContent = "❌ Name and feedback are both required.";
+        return;
+      }
+
+      // Optional: minimum length checks
+      if (name.length < 2 || message.length < 5) {
+        fbStatus.style.display = "block";
+        fbStatus.style.color = "#ef4444";
+        fbStatus.textContent = "❌ Please enter a valid name and proper feedback.";
+        return;
+      }
+
+      fbSubmit.disabled = true;
+      fbSubmit.textContent = "Submitting...";
+
+      try {
+        const feedbackRef = firebase.database().ref("feedbacks").push();
+        await feedbackRef.set({
+          name: name,
+          message: message,
+          time: getFormattedTime(),
+          uid: auth.currentUser?.uid || "unknown"
+        });
+
+        // Clear form and show success
+        fbName.value = "";
+        fbMessage.value = "";
+        fbStatus.style.display = "block";
+        fbStatus.style.color = "#22c55e";
+        fbStatus.textContent = "✅ Thanks for your feedback!";
+      } catch (err) {
+        console.error(err);
+        fbStatus.style.display = "block";
+        fbStatus.style.color = "#ef4444";
+        fbStatus.textContent = "Error sending feedback. Try again.";
+      } finally {
+        fbSubmit.disabled = false;
+        fbSubmit.textContent = "Submit";
+        setTimeout(() => fbStatus.style.display = "none", 4000);
+      }
+    });
 
   </script>
+  <script>
+
+
+function loadFeedbacks() {
+  firebase.database().ref("feedbacks").on("value", snap => {
+    feedbackList.innerHTML = "";
+    if (!snap.exists()) {
+      feedbackList.innerHTML = "<p style='color:#aaa'>No feedback yet.</p>";
+      return;
+    }
+
+    snap.forEach(child => {
+      const f = child.val();
+      feedbackList.innerHTML += `
+        <div style="
+          background:#020617;
+          padding:12px;
+          border-radius:12px;
+          margin-bottom:10px;
+          border:1px solid rgba(255,255,255,0.08);
+        ">
+          <p style="font-size:0.9rem;color:#cbd5f5;margin-top:6px;">
+            ${f.message}
+          </p>
+          <small style="color:#64748b;">
+            ${new Date(f.time).toLocaleString()}
+          </small>
+        </div>
+      `;
+    });
+  });
+}
+
+
+function closeFeedbackPopup() {
+  feedbackPopup.style.display = "none";
+}
+</script>
+<script>
+// Single, validated feedback handler above ensures Name and Message are mandatory.
+
+</script>
+
   <script src="theme.js"></script>
 
 </body>
