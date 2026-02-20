@@ -543,6 +543,19 @@ h1 {
 
   <!-- BOOKS GRID -->
   <div class="books">
+
+    <!-- English -->
+    <div class="book">
+      <img src="english.png" onerror="this.src='https://via.placeholder.com/200x300?text=Math'">
+      <div class="book-content">
+        <h3>English(Course-B)</h3>
+        <div class="book-meta">Year: 2026</div>
+        <div class="book-meta">Author: Bhavesh</div>
+        <div class="price"><span>Free</span></div>
+        <button class="preview-btn" onclick="previewPDF('https://drive.google.com/file/d/1ImKYLQo45QJEmHGtcJOet_m4ag784Kyf/preview')">Preview</button>
+      </div>
+    </div>
+
     <!-- Mathematics -->
     <div class="book">
       <img src="maths.png" onerror="this.src='https://via.placeholder.com/200x300?text=Math'">
@@ -551,7 +564,7 @@ h1 {
         <div class="book-meta">Year: 2026</div>
         <div class="book-meta">Author: Bhavesh</div>
         <div class="price"><span>Free</span></div>
-        <button class="preview-btn" onclick="previewPDF('mathematics.pdf')">Preview</button>
+        <button class="preview-btn" onclick="previewPDF('https://drive.google.com/file/d/1zq5xZSJXngJqVX-8P_3yjyHBNaqmwqZ0/preview')">Preview</button>
       </div>
     </div>
   </div>
@@ -604,6 +617,22 @@ h1 {
 <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
 
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyCcpG-oEqkDprgTwWXKt5CFsttjAQAZFNg",
+    authDomain: "bookstore-6ab08.firebaseapp.com",
+    projectId: "bookstore-6ab08",
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+
+  auth.onAuthStateChanged(user => {
+    if (!user) {
+      window.location.replace("index.html");
+    }
+  });
+</script>
 
   <script>
     
