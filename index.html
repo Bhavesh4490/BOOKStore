@@ -718,6 +718,25 @@
       display: none;
     }
 
+    /* Toast (login success) */
+    #toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #111;
+      color: #e6ffed;
+      border-left: 4px solid #22c55e;
+      padding: 12px 18px;
+      border-radius: 8px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      transform: translateY(20px);
+      opacity: 0;
+      transition: transform 0.35s ease, opacity 0.35s ease;
+      z-index: 11000;
+      font-weight: 600;
+    }
+    #toast.show { transform: translateY(0); opacity: 1; }
+
     /* Responsive Tweaks */
     @media (max-width: 600px) {
       .books { grid-template-columns: 1fr; }
@@ -1409,6 +1428,9 @@ footer #fbStatus {
     </div>
   </div>
 
+  <!-- Toast -->
+  <div id="toast">Successfully logged in</div>
+
   <!-- PDF PREVIEW OVERLAY -->
   <div id="previewOverlay">
     <div id="previewHeader">
@@ -1510,24 +1532,28 @@ footer #fbStatus {
     }
 
     // Auth State Listener
-  auth.onAuthStateChanged((user) => {
-  updateNidarButton(user);
+    let wasLoggedIn = false;
+    auth.onAuthStateChanged((user) => {
+      updateNidarButton(user);
 
-  if (user) {
-    // ✅ Logged in
-    initUser(user);
+      if (user) {
+        // ✅ Logged in
+        initUser(user);
 
-    loginPopup.classList.remove("show");
-    toggleMode(false); // reset to login mode
-  } else {
-    // ❌ Not logged in
-    initUser(null);
+        loginPopup.classList.remove("show");
+        toggleMode(false); // reset to login mode
+        if (!wasLoggedIn) showToast('Successfully logged in');
+      } else {
+        // ❌ Not logged in
+        initUser(null);
 
-    // 🔑 FORCE SHOW LOGIN POPUP
-    loginPopup.classList.add("show");
-    toggleMode(false);
-  }
-});
+        // 🔑 FORCE SHOW LOGIN POPUP
+        loginPopup.classList.add("show");
+        toggleMode(false);
+      }
+
+      wasLoggedIn = !!user;
+    });
 
 
 const nidarExploreBtn = document.getElementById("nidarExploreBtn");
@@ -1691,6 +1717,16 @@ auth.onAuthStateChanged(user => {
 
     function openFullscreen() {
       if (pdfFrame.requestFullscreen) pdfFrame.requestFullscreen();
+    }
+
+    // Toast helper
+    function showToast(msg, duration = 3000) {
+      const t = document.getElementById('toast');
+      if (!t) return;
+      t.textContent = msg;
+      t.classList.add('show');
+      if (t._hideTimeout) clearTimeout(t._hideTimeout);
+      t._hideTimeout = setTimeout(() => t.classList.remove('show'), duration);
     }
 
     // Security
