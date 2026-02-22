@@ -780,25 +780,41 @@ input:checked ~ .verified-label {
     // --- 4. DATA MANAGEMENT (USERS) ---
     let usersData = [];
 
-    function loadUsers() {
-      // NOTE: Client SDK cannot list all users from Auth. 
-      // This relies on your app saving users to 'users/' node in Realtime DB upon login.
-      db.ref('users').on('value', (snapshot) => {
-        usersContainer.innerHTML = '';
-        const data = snapshot.val();
-        usersData = [];
+   function loadUsers() {
+  db.ref('users').on('value', (snapshot) => {
+    usersContainer.innerHTML = '';
+    const data = snapshot.val();
+    usersData = [];
 
-        if (data) {
-          Object.keys(data).forEach(key => {
-            usersData.push({ uid: key, ...data[key] });
-          });
-          renderUsers(usersData);
-        } else {
-          usersContainer.innerHTML = `<div style="grid-column:1/-1;text-align:center;color:#666;">No user records found in Database.</div>`;
-        }
+    if (data) {
+      Object.keys(data).forEach(key => {
+        usersData.push({ uid: key, ...data[key] });
       });
-    }
 
+      // 🔥 SORTING LOGIC
+      usersData.sort((a, b) => {
+
+        // 1️⃣ Admin always first
+        if (a.uid === ADMIN_UID) return -1;
+        if (b.uid === ADMIN_UID) return 1;
+
+        // 2️⃣ Newest users next (higher createdAt first)
+        const timeA = a.createdAt || 0;
+        const timeB = b.createdAt || 0;
+
+        return timeB - timeA; // newest first
+      });
+
+      renderUsers(usersData);
+
+    } else {
+      usersContainer.innerHTML = `
+        <div style="grid-column:1/-1;text-align:center;color:#666;">
+          No user records found in Database.
+        </div>`;
+    }
+  });
+}
    function renderUsers(list) {
   usersContainer.innerHTML = '';
 
@@ -916,7 +932,13 @@ window.toggleBlock = function(uid, status) {
     .catch(() => showToast("Failed to update block status", 'error'));
 };
 
-
+db.ref('users/' + user.uid).set({
+  displayName: user.displayName || '',
+  email: user.email || '',
+  verified: false,
+  blocked: false,
+  createdAt: firebase.database.ServerValue.TIMESTAMP
+});
     
 
     // Filter Search
