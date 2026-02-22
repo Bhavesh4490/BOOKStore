@@ -251,8 +251,7 @@
       font-weight: 500;
     }
     
-    #greeting span { color: var(--accent-color); }
-    #greeting .vip { color: #facc15; text-shadow: 0 0 10px rgba(250, 204, 21, 0.3); animation: none; }
+    #greeting .verified { color: #facc15; text-shadow: 0 0 10px rgba(250, 204, 21, 0.3); animation: none; }
     #greeting .Admin { color: #ef4444; text-shadow: 0 0 10px rgba(239, 68, 68, 0.3); animation: none; }
     
    #adminBtn {
@@ -1603,7 +1602,7 @@ auth.onAuthStateChanged(user => {
       userRef.set({
         displayName: user.displayName || "",
         email: user.email || "",
-        vip: false,
+        verified: false,
         createdAt: Date.now()
       });
     }
@@ -1636,12 +1635,15 @@ auth.onAuthStateChanged(user => {
     .then(snapshot => {
       const data = snapshot.val() || {};
       const name = data.displayName || user.email.split("@")[0];
-      const isVIP = data.vip === true;
+      const isVerified = data.verified === true;
 
       let tag = "";
 
-      if (isVIP) {
-        tag = ` <span class="vip">(VIP)</span>`;
+      if (isVerified) {
+        tag = ` <i class="material-icons"
+             style="font-size:16px;color:#3b82f6;vertical-align:middle;">
+             verified
+          </i>`;
       }
 
       if (isAdmin) {
