@@ -532,18 +532,7 @@
       text-align: center;
     }
 
-    #closeLogin {
-      position: absolute;
-      top: 15px;
-      right: 15px;
-      background: transparent;
-      border: none;
-      color: var(--text-muted);
-      font-size: 24px;
-      cursor: pointer;
-      transition: color 0.2s;
-    }
-    #closeLogin:hover { color: white; }
+    /* removed close button to make login mandatory */
 
     #loginBox h2 {
       font-family: var(--font-head);
@@ -1395,7 +1384,7 @@ footer #fbStatus {
   <!-- LOGIN POPUP -->
   <div id="loginPopup">
     <div id="loginBox">
-      <button id="closeLogin">&times;</button>
+      <!-- close button removed to enforce mandatory login -->
       <h2>Login</h2>
       
       <div id="authErrorBox"></div>
@@ -1490,9 +1479,7 @@ footer #fbStatus {
     let isCreatingAccount = false;
 
     // --- 3. EVENT LISTENERS ---
-closeLogin.onclick = () => {
-  loginPopup.classList.remove("show");
-};
+    // close button removed; login popup may only be dismissed by successful auth
 
    
 
