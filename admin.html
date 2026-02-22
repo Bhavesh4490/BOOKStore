@@ -28,9 +28,8 @@
       --text-main: #ffffff;
       --text-muted: #a1a1aa;
       
-      --vip-gold: #facc15;
-      --vip-glow: 0 0 15px rgba(250, 204, 21, 0.3);
-      
+      --verified-blue: #3b82f6;
+--verified-glow: 0 0 18px rgba(59, 130, 246, 0.5);
       --danger: #ef4444;
       --success: #22c55e;
       
@@ -231,8 +230,12 @@
       text-transform: uppercase;
     }
     .badge-admin { background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); }
-    .badge-vip { background: rgba(250, 204, 21, 0.15); color: #facc15; border: 1px solid rgba(250, 204, 21, 0.3); box-shadow: var(--vip-glow); }
-    .badge-user { background: rgba(255, 255, 255, 0.05); color: var(--text-muted); }
+    .badge-verified { 
+  background: rgba(59, 130, 246, 0.15); 
+  color: #60a5fa; 
+  border: 1px solid rgba(59, 130, 246, 0.4); 
+  box-shadow: var(--verified-glow);
+}    .badge-user { background: rgba(255, 255, 255, 0.05); color: var(--text-muted); }
 
     /* User Info */
     .info-group { margin-bottom: 15px; }
@@ -283,8 +286,8 @@
     .name-input:focus { border-bottom-color: var(--accent-color); }
     .edit-icon { font-size: 1rem; color: var(--text-muted); cursor: pointer; }
 
-    /* --- 5. VIP TOGGLE SWITCH --- */
-    .vip-control {
+    /* --- 5. Verified TOGGLE SWITCH --- */
+    .verified-control {
       margin-top: 15px;
       padding-top: 15px;
       border-top: 1px solid rgba(255,255,255,0.05);
@@ -293,8 +296,8 @@
       align-items: center;
     }
 
-    .vip-label { font-size: 0.9rem; font-weight: 500; display: flex; align-items: center; gap: 6px; }
-    .vip-label .material-icons { font-size: 1.1rem; color: var(--vip-gold); }
+    .verified-label { font-size: 0.9rem; font-weight: 500; display: flex; align-items: center; gap: 6px; }
+    .verified-label .material-icons { font-size: 1.1rem; color: var(--verified-gold); }
 
     /* The Switch */
     .switch {
@@ -328,9 +331,22 @@
     .slider.round { border-radius: 34px; }
     .slider.round:before { border-radius: 50%; }
 
-    input:checked + .slider { background-color: var(--vip-gold); box-shadow: var(--vip-glow); }
-    input:checked + .slider:before { transform: translateX(20px); }
+   input:checked + .slider { 
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  box-shadow: var(--verified-glow);
+}
 
+.slider {
+  background-color: #2a2a2a;
+}
+
+.slider:before {
+  background: white;
+}
+
+input:checked + .slider:before {
+  transform: translateX(20px);
+}
     /* Footer */
     footer {
       text-align: center;
@@ -601,7 +617,10 @@ input.blocked:checked + .slider {
   transform: scale(1.15);
   color: #22c55e;
 }
-
+input:checked ~ .verified-label {
+  color: #60a5fa;
+  text-shadow: 0 0 8px rgba(59,130,246,0.6);
+}
   </style>
 </head>
 <body>
@@ -789,11 +808,11 @@ input.blocked:checked + .slider {
   }
 
   list.forEach(user => {
-    const isVip = user.vip === true;
+    const isVerified = user.verified === true;
     const isAdmin = user.uid === ADMIN_UID;
     const isBlocked = user.blocked === true; // <-- move here
 
-    const role = isAdmin ? 'admin' : (isVip ? 'vip' : 'user');
+    const role = isAdmin ? 'admin' : (isVerified ? 'verified' : 'user');
     const initial = (user.displayName || user.email || 'U').charAt(0).toUpperCase();
 
     const card = document.createElement('div');
@@ -801,7 +820,7 @@ input.blocked:checked + .slider {
     card.innerHTML = `
   <div class="card-header">
     <div class="user-avatar">${initial}</div>
-    <span class="badge badge-${role}">${role}</span>
+    <span class="badge badge-${role}">${role === 'verified' ? 'Verified' : (role === 'admin' ? 'Admin' : 'User')}</span>
   </div>
 
   <div class="info-group">
@@ -826,12 +845,12 @@ input.blocked:checked + .slider {
     </div>
   </div>
 
-  <div class="vip-control">
-    <div class="vip-label">
-      <span class="material-icons">stars</span> VIP Access
+  <div class="verified-control">
+    <div class="verified-label">
+      <span class="material-icons" style="color:#3b82f6;">verified_user</span> Verified
     </div>
     <label class="switch">
-      <input type="checkbox" ${isVip ? 'checked' : ''} onchange="toggleVip('${user.uid}', this.checked)">
+      <input type="checkbox" ${isVerified ? 'checked' : ''} onchange="toggleVerified('${user.uid}', this.checked)">
       <span class="slider round"></span>
     </label>
   </div>
@@ -878,11 +897,11 @@ window.editName = function(uid, el) {
 
     // --- 5. INTERACTION LOGIC ---
 
-    // Toggle VIP Status
-window.toggleVip = function(uid, status) {
-  db.ref('users/' + uid).update({ vip: status })
-    .then(() => showToast(`VIP status ${status ? 'Enabled' : 'Disabled'}`, 'success'))
-    .catch(err => showToast("Error updating VIP", 'error'));
+    // Toggle Verified Status
+window.toggleVerified = function(uid, status) {
+  db.ref('users/' + uid).update({ verified: status })
+    .then(() => showToast(`Verified status ${status ? 'Enabled' : 'Disabled'}`, 'success'))
+    .catch(err => showToast("Error updating Verified", 'error'));
 };
 
 // Toggle Block Status
