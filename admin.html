@@ -751,9 +751,7 @@ input:checked ~ .verified-label {
           adminNameDisplay.innerText = user.displayName || "Administrator";
           adminNameDisplay.style.display = "inline";
           loadUsers(); // Fetch user data
-          setInterval(() => {
-  renderUsers(usersData);
-}, 1000);
+          
           initFeedback(); // Initialize feedback system
         } else {
           // ACCESS DENIED (Wrong User)
@@ -917,31 +915,41 @@ function formatLastSeen(timestamp) {
 }
 window.editName = function(uid, el) {
   const currentName = el.innerText;
+
   const input = document.createElement('input');
   input.type = 'text';
   input.value = currentName;
   input.className = 'name-input';
+
   el.replaceWith(input);
   input.focus();
 
-  // Save on blur or Enter
   function saveName() {
     const newName = input.value.trim() || 'No Name';
-    db.ref('users/' + uid).update({ displayName: newName })
-      .then(() => {
-        showToast('Display Name updated', 'success');
-        renderUsers(usersData); // Refresh to show updated name
-      })
-      .catch(() => showToast('Failed to update name', 'error'));
+
+    if (newName === currentName) {
+      renderUsers(usersData);
+      return;
+    }
+
+    db.ref('users/' + uid).update({
+      displayName: newName
+    }).then(() => {
+      showToast("Display Name Updated", "success");
+    }).catch(() => {
+      showToast("Failed to update name", "error");
+    });
   }
 
   input.addEventListener('blur', saveName);
+
   input.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') input.blur();
+    if (e.key === 'Enter') {
+      input.blur();
+    }
   });
 };
-
-    // --- 5. INTERACTION LOGIC ---
+   // --- 5. INTERACTION LOGIC ---
 
     // Toggle Verified Status
 window.toggleVerified = function(uid, status) {
