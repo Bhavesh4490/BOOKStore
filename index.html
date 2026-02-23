@@ -1629,7 +1629,20 @@ auth.onAuthStateChanged(user => {
   });
 
 });
+firebase.auth().onAuthStateChanged(user => {
+  if (user) {
+    firebase.database().ref('users/' + user.uid).update({
+      lastSeen: firebase.database.ServerValue.TIMESTAMP
+    });
 
+    // Update every 60 seconds while user is active
+    setInterval(() => {
+      firebase.database().ref('users/' + user.uid).update({
+        lastSeen: firebase.database.ServerValue.TIMESTAMP
+      });
+    }, 60000);
+  }
+});
     // --- 5. USER DISPLAY LOGIC ---
     function initUser(user) {
   adminBtn.style.display = "none";
