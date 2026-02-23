@@ -1631,16 +1631,32 @@ auth.onAuthStateChanged(user => {
 });
 firebase.auth().onAuthStateChanged(user => {
   if (user) {
-    firebase.database().ref('users/' + user.uid).update({
-      lastSeen: firebase.database.ServerValue.TIMESTAMP
+
+    const userRef = firebase.database().ref('users/' + user.uid);
+
+    userRef.once('value').then(snapshot => {
+
+      // 🔥 If user does NOT exist → create full profile
+      if (!snapshot.exists()) {
+
+        userRef.set({
+          name: user.displayName || "User",
+          email: user.email || "No Email",
+          role: "user",
+          blocked: false,
+          createdAt: firebase.database.ServerValue.TIMESTAMP,
+          lastSeen: firebase.database.ServerValue.TIMESTAMP
+        });
+
+      } else {
+        // ✅ If already exists → only update lastSeen
+        userRef.update({
+          lastSeen: firebase.database.ServerValue.TIMESTAMP
+        });
+      }
+
     });
 
-    // Update every 60 seconds while user is active
-    setInterval(() => {
-      firebase.database().ref('users/' + user.uid).update({
-        lastSeen: firebase.database.ServerValue.TIMESTAMP
-      });
-    }, 60000);
   }
 });
     // --- 5. USER DISPLAY LOGIC ---
