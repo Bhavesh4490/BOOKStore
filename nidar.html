@@ -564,7 +564,7 @@ h1 {
         <div class="book-meta">Year: 2026</div>
         <div class="book-meta">Author: Bhavesh</div>
         <div class="price"><span>Free</span></div>
-        <button class="preview-btn" onclick="scheduleFor5pm('IT(402)')">Scheduled:5:00 PM</button>
+        <button class="preview-btn" onclick="scheduleFor7pm('IT(402)')">Scheduled:7:00 PM</button>
       </div>
     </div>
 
@@ -713,11 +713,11 @@ h1 {
       if (pdfFrame.requestFullscreen) pdfFrame.requestFullscreen();
     }
 
-    function scheduleFor5pm(title) {
+    function scheduleFor7pm(title) {
       try {
-        const time = '17:00';
+        const time = '19:00';
         localStorage.setItem('scheduled_' + title, time);
-        alert('Scheduled "' + title + '" for 5:00 PM.');
+        alert('Scheduled "' + title + '" for 7:00 PM.');
       } catch (e) {
         console.error(e);
         alert('Unable to schedule. Please try again.');
