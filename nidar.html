@@ -544,6 +544,30 @@ h1 {
   <!-- BOOKS GRID -->
   <div class="books">
 
+    <!-- Sanskrit -->
+    <div class="book">
+      <img src="sanskrit.png" onerror="this.src='https://via.placeholder.com/200x300?text=Math'">
+      <div class="book-content">
+        <h3>Sanskrit</h3>
+        <div class="book-meta">Year: 2026</div>
+        <div class="book-meta">Author: Bhavesh</div>
+        <div class="price"><span>Free</span></div>
+        <button class="preview-btn" onclick="scheduleForTomorrowAt('Sanskrit',17,0)">Scheduled: 27 Feb</button>
+      </div>
+    </div>
+    
+<!-- IT -->
+    <div class="book">
+      <img src="it.png" onerror="this.src='https://via.placeholder.com/200x300?text=Math'">
+      <div class="book-content">
+        <h3>IT(402)</h3>
+        <div class="book-meta">Year: 2026</div>
+        <div class="book-meta">Author: Bhavesh</div>
+        <div class="price"><span>Free</span></div>
+        <button class="preview-btn" onclick="scheduleFor5pm('IT(402)')">Scheduled:5:00 PM</button>
+      </div>
+    </div>
+
 <!-- Science -->
     <div class="book">
       <img src="science.png" onerror="this.src='https://via.placeholder.com/200x300?text=Math'">
@@ -687,6 +711,30 @@ h1 {
 
     function openFullscreen() {
       if (pdfFrame.requestFullscreen) pdfFrame.requestFullscreen();
+    }
+
+    function scheduleFor5pm(title) {
+      try {
+        const time = '17:00';
+        localStorage.setItem('scheduled_' + title, time);
+        alert('Scheduled "' + title + '" for 5:00 PM.');
+      } catch (e) {
+        console.error(e);
+        alert('Unable to schedule. Please try again.');
+      }
+    }
+
+    function scheduleForTomorrowAt(title, hour, minute) {
+      try {
+        const now = new Date();
+        const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, hour, minute, 0, 0);
+        const iso = tomorrow.toISOString();
+        localStorage.setItem('scheduled_' + title, iso);
+        alert('Scheduled "' + title + '" for ' + tomorrow.toLocaleString());
+      } catch (e) {
+        console.error(e);
+        alert('Unable to schedule. Please try again.');
+      }
     }
 
     // --- SEARCH ---
