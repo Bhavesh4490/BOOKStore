@@ -552,7 +552,7 @@ h1 {
         <div class="book-meta">Year: 2026</div>
         <div class="book-meta">Author: Bhavesh</div>
         <div class="price"><span>Free</span></div>
-        <button class="preview-btn" onclick="scheduleFor9pm('Sanskrit',17,0)">Scheduled: 9:00 PM</button>
+        <button class="preview-btn" onclick="scheduleFor9pm('Sanskrit',17,0)">Scheduled: 9:45 PM</button>
       </div>
     </div>
     
@@ -715,9 +715,9 @@ h1 {
 
     function scheduleFor9pm(title) {
       try {
-        const time = '21:00';
+        const time = '21:45';
         localStorage.setItem('scheduled_' + title, time);
-        alert('Scheduled "' + title + '" for 9:00 PM.');
+        alert('Scheduled "' + title + '" for 9:45 PM.');
       } catch (e) {
         console.error(e);
         alert('Unable to schedule. Please try again.');
