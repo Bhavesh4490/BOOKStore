@@ -621,6 +621,35 @@ input:checked ~ .verified-label {
   color: #60a5fa;
   text-shadow: 0 0 8px rgba(59,130,246,0.6);
 }
+.user-title {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.member-count {
+  font-size: 0.75rem;
+  padding: 6px 14px;
+  border-radius: 50px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  color: white;
+  box-shadow: 0 0 15px rgba(59,130,246,0.4);
+  animation: glowPulse 2s infinite ease-in-out;
+  transition: 0.3s;
+}
+
+.member-count:hover {
+  transform: scale(1.08);
+  box-shadow: 0 0 25px rgba(139,92,246,0.7);
+}
+
+@keyframes glowPulse {
+  0%,100% { box-shadow: 0 0 12px rgba(59,130,246,0.4); }
+  50% { box-shadow: 0 0 22px rgba(139,92,246,0.7); }
+}
   </style>
 </head>
 <body>
@@ -681,7 +710,10 @@ input:checked ~ .verified-label {
       
       <!-- Users Section -->
       <div class="section-header">
-        <h2>User Management</h2>
+        <h2 class="user-title">
+  User Management
+  <span class="member-count" id="memberCount">0 Members</span>
+</h2>
         <div class="search-bar">
           <span class="material-icons search-icon">search</span>
           <input type="text" id="userSearch" placeholder="Search by name, email or UID..." onkeyup="filterUsers()">
@@ -795,17 +827,25 @@ input:checked ~ .verified-label {
       // 🔥 SORTING LOGIC
       usersData.sort((a, b) => {
 
-        // 1️⃣ Admin always first
-        if (a.uid === ADMIN_UID) return -1;
-        if (b.uid === ADMIN_UID) return 1;
+  // 1️⃣ Admin always first
+  if (a.uid === ADMIN_UID) return -1;
+  if (b.uid === ADMIN_UID) return 1;
 
-        // 2️⃣ Newest users next (higher createdAt first)
-        const timeA = a.createdAt || 0;
-        const timeB = b.createdAt || 0;
+  const lastSeenA = a.lastSeen || 0;
+  const lastSeenB = b.lastSeen || 0;
 
-        return timeB - timeA; // newest first
-      });
+  // 2️⃣ Sort by Last Seen (latest at top)
+  if (lastSeenA !== lastSeenB) {
+    return lastSeenB - lastSeenA;
+  }
 
+  // 3️⃣ If same Last Seen → Newest createdAt first
+  const createdA = a.createdAt || 0;
+  const createdB = b.createdAt || 0;
+
+  return createdB - createdA;
+});
+document.getElementById('memberCount').innerText = usersData.length + " Members";
       renderUsers(usersData);
 
     } else {
@@ -890,27 +930,35 @@ input:checked ~ .verified-label {
 </div>
 `;
 function formatLastSeen(timestamp) {
-  if (!timestamp) return "Unknown";
+  if (!timestamp) return "-";
 
   const now = Date.now();
   const diff = now - timestamp;
 
   const seconds = Math.floor(diff / 1000);
   const minutes = Math.floor(diff / (60 * 1000));
+  const hours = Math.floor(diff / (60 * 60 * 1000));
   const days = Math.floor(diff / (24 * 60 * 60 * 1000));
   const months = Math.floor(diff / (30 * 24 * 60 * 60 * 1000));
 
-  // 🔥 Just Now for first 5 seconds
+  // Just Now (first 5 seconds)
   if (seconds <= 5) return "Just Now";
 
+  // Seconds
   if (seconds < 60) return `${seconds} Sec ago`;
 
+  // Minutes
   if (minutes < 60) return `${minutes} Min ago`;
 
+  // Hours (before 24h)
+  if (hours < 24) return `${hours} Hour${hours > 1 ? 's' : ''} ago`;
+
+  // Days (after 24h)
   if (days < 30) return `${days} Day${days > 1 ? 's' : ''} ago`;
 
+  // Months
   return `${months} Month${months > 1 ? 's' : ''} ago`;
-}    usersContainer.appendChild(card);
+}   usersContainer.appendChild(card);
   });
 }
 window.editName = function(uid, el) {
