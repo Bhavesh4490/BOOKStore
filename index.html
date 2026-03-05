@@ -357,7 +357,7 @@
     }
 
     .book {
-  background: rgba(18, 18, 18, 0.6);
+ background: var(--bg-card);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
   border: 1px solid var(--border-color);
@@ -826,7 +826,7 @@
 }
 
 .batch-card {
-  background: rgba(18, 18, 18, 0.6);
+  background: var(--bg-card);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--border-color);
@@ -1301,6 +1301,16 @@ footer #fbStatus {
 <h2 class="section-title">Browse Series</h2>
 
 <div class="batch-grid">
+
+  <div class="batch-card">
+    <img src="timeline.png" alt="History Timeline">
+    <span class="batch-tag">By Bhavesh</span>
+    <h3>History Timeline</h3>
+    <button class="explore-btn" id="timelineExploreBtn">
+  Explore
+</button>
+  </div>
+
   <!-- Abhay Batch -->
   <div class="batch-card">
     <img src="nidar.png" alt="Nidar Series">
@@ -1324,13 +1334,6 @@ footer #fbStatus {
       <div class="collection-desc">Sample Papers & Question Banks</div>
     </a>
     
-    <!-- CBSE -->
-    <a href="cbse.html" class="collection-box">
-      <img src="https://upload.wikimedia.org/wikipedia/en/thumb/9/95/CBSE_new_logo.svg/512px-CBSE_new_logo.svg.png"" class="collection-img" alt="CBSE" onerror="this.src='https://via.placeholder.com/100?text=CBSE'">
-      <div class="collection-title">CBSE Official</div>
-      <div class="collection-desc">Syllabus & PYQs</div>
-    </a>
-  </div>
 
   <!-- SOCIAL LINKS -->
   <div class="social-buttons hide-during-preview">
@@ -1546,6 +1549,28 @@ footer #fbStatus {
       wasLoggedIn = !!user;
     });
 
+/* ===== Explore Buttons Fix ===== */
+
+document.addEventListener("DOMContentLoaded", function() {
+
+  const timelineBtn = document.getElementById("timelineExploreBtn");
+  const nidarBtn = document.getElementById("nidarExploreBtn");
+
+  if (timelineBtn) {
+    timelineBtn.addEventListener("click", function () {
+      window.location.href = "timeline.html", "_blank"; 
+      // Change this if your timeline page name is different
+    });
+  }
+
+  if (nidarBtn) {
+    nidarBtn.addEventListener("click", function () {
+      window.location.href = "nidar.html"; 
+      // Change this if needed
+    });
+  }
+
+});
 
 const nidarExploreBtn = document.getElementById("nidarExploreBtn");
 
